@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta
+    content="Plataforma de estudos para concursos públicos, vestibulares e provas públicas, com catálogo de carreiras, bancas, anos, editais e treinos por matéria."
+    name="description" />
+  <title>Desafio Aprovação V10</title>
+  <link href="style.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">DA</div>
+        <div class="brand-text"><strong>Desafio</strong><span>Aprovação</span></div>
+      </div>
+      <nav class="sidebar-nav"><button class="nav-item active"
+          data-view="homeScreen"><span>⌂</span><b>Início</b></button><button class="nav-item"
+          data-scroll="quickStart"><span>🚀</span><b>Começar</b></button><button class="nav-item"
+          data-scroll="modes"><span>🎮</span><b>Modos</b></button><button class="nav-item"
+          data-scroll="stats"><span>📊</span><b>Painel</b></button><button class="nav-item"
+          data-scroll="answerHistorySection"><span>🕘</span><b>Histórico</b></button><button class="nav-item"
+          data-scroll="publicBankSection"><span>🏛️</span><b>Concursos</b></button><button class="nav-item"
+          data-scroll="officialSources"><span>📄</span><b>Vestibulares</b></button><button class="nav-item"
+          data-scroll="editalArchiveSection"><span>📚</span><b>Editais</b></button></nav>
+      <div class="sidebar-card">
+        <span class="small-label">META DIÁRIA</span>
+        <strong id="sidebarDaily">0 de 20</strong>
+        <div class="mini-progress">
+          <div id="sidebarDailyFill"></div>
+        </div>
+        <small>Continue treinando para fechar sua meta.</small>
+      </div>
+      <div class="sidebar-bottom">
+        <button class="icon-action" id="btnSound" title="Som">🔊</button>
+        <button class="icon-action" id="btnTheme" title="Tema">☀️</button>
+      </div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar">
+        <div class="search-box">
+          <span>⌕</span>
+          <input autocomplete="off" id="quickSearch" placeholder="Filtrar matéria..." type="search" />
+        </div>
+        <div class="topbar-right">
+          <div class="study-pill"><span>🔥</span><strong id="topStreak">0</strong><small>melhor combo</small></div>
+          <div class="profile-bubble">DA</div>
+        </div>
+      </header>
+      <main class="content">
+        <section class="screen active" id="homeScreen">
+          <div class="page-heading">
+            <div>
+              <span class="eyebrow">ESTUDE SEM COMPLICAÇÃO</span>
+              <h1>Escolha seu objetivo e comece a responder</h1>
+              <p>Vestibular ou concurso público: escolha uma área, matéria ou banca. O site monta o treino e cuida da
+                rotação das perguntas para você.</p>
+            </div>
+            <button class="primary-btn" id="btnStartTop">Montar meu treino <span>→</span></button>
+          </div>
+          <section class="quick-start-section" id="quickStart">
+            <div class="quick-start-head">
+              <div><span class="eyebrow">COMEÇO RÁPIDO</span>
+                <h2>O que você está estudando?</h2>
+                <p>Escolha uma opção. Depois você pode ajustar matéria, dificuldade e quantidade.</p>
+              </div>
+            </div>
+            <div class="goal-grid">
+              <button class="goal-card" data-quick-mode="vestibular"><span
+                  class="goal-icon">🎓</span><strong>Vestibular</strong><small>ENEM, FUVEST, UNESP, UNICAMP e matérias
+                  do ensino médio.</small><b>Começar →</b></button>
+              <button class="goal-card" data-quick-mode="concurso"><span class="goal-icon">🏛️</span><strong>Concurso
+                  público</strong><small>Português, lógica, informática, matemática e direito.</small><b>Começar
+                  →</b></button>
+              <button class="goal-card" data-quick-mode="materia"><span class="goal-icon">📘</span><strong>Treinar uma
+                  matéria</strong><small>Escolha a disciplina e faça um treino personalizado.</small><b>Escolher matéria
+                  →</b></button>
+              <button class="goal-card" data-quick-mode="edital"><span class="goal-icon">📚</span><strong>Treinar por
+                  edital</strong><small>Use os conteúdos programáticos e documentos oficiais catalogados.</small><b>Ver
+                  editais →</b></button>
+            </div>
+            <div class="how-it-works">
+              <strong>Como funciona</strong>
+              <span><b>1</b> Escolha o objetivo</span><span><b>2</b> Responda</span><span><b>3</b> Veja a explicação e
+                seu desempenho</span>
+            </div>
+          </section>
+          <section class="study-dashboard" id="studyDashboard">
+            <div class="section-title dashboard-title">
+              <div><span class="eyebrow">SEU PAINEL DE ESTUDO</span>
+                <h2>Treino, desempenho e histórico no mesmo lugar</h2>
+                <p class="section-copy">Escolha o modo, ajuste seu treino, acompanhe o progresso e reveja as questões
+                  respondidas sem sair desta área.</p>
+              </div><span class="dashboard-xp" id="dashboardXp">0 XP</span>
+            </div>
+            <section class="modes-section" id="modes">
+              <div class="section-title">
+                <div><span class="eyebrow">MODOS DE TREINO</span>
+                  <h2>Escolha uma dinâmica</h2>
+                </div>
+              </div>
+              <div class="mode-grid" id="modeGrid">
+                <button class="mode-card selected" data-mode="classico"><span class="mode-icon">🎯</span>
+                  <div><strong>Clássico</strong><small>Quantidade personalizada e resultado no final.</small></div><span
+                    class="check">✓</span>
+                </button>
+                <button class="mode-card" data-mode="infinito"><span class="mode-icon">♾️</span>
+                  <div><strong>Infinito</strong><small>Questões contínuas com rotação do banco.</small></div><span
+                    class="check">✓</span>
+                </button>
+                <button class="mode-card" data-mode="sobrevivencia"><span class="mode-icon">❤️</span>
+                  <div><strong>Sobrevivência</strong><small>Três vidas. Cada erro custa uma.</small></div><span
+                    class="check">✓</span>
+                </button>
+                <button class="mode-card" data-mode="contraTempo"><span class="mode-icon">⏱️</span>
+                  <div><strong>Contra o tempo</strong><small>Faça o máximo em 60 segundos.</small></div><span
+                    class="check">✓</span>
+                </button>
+                <button class="mode-card" data-mode="vestibular"><span class="mode-icon">🎓</span>
+                  <div><strong>Vestibular</strong><small>Linguagens, exatas, humanas e natureza.</small></div><span
+                    class="check">✓</span>
+                </button>
+                <button class="mode-card" data-mode="concurso"><span class="mode-icon">🏛️</span>
+                  <div><strong>Concurso público</strong><small>Português, lógica, informática e direito.</small></div>
+                  <span class="check">✓</span>
+                </button>
+                <button class="mode-card" data-mode="provasReais"><span class="mode-icon">📄</span>
+                  <div><strong>Provas reais</strong><small>Itens adaptados de provas oficiais, com banca, ano e questão
+                      de referência.</small></div><span class="check">✓</span>
+                </button>
+                <button class="mode-card" data-mode="edital"><span class="mode-icon">📚</span>
+                  <div><strong>Do edital à questão</strong><small>Questões autorais criadas a partir dos conteúdos e da
+                      estrutura dos programas oficiais.</small></div><span class="check">✓</span>
+                </button>
+              </div>
+            </section>
+            <section class="stats-strip" id="stats">
+              <article class="stat-card">
+                <div class="stat-icon purple">★</div>
+                <div><small>Recorde</small><strong id="homeBest">0</strong><span>pontos</span></div>
+              </article>
+              <article class="stat-card">
+                <div class="stat-icon orange">⚡</div>
+                <div><small>XP acumulado</small><strong id="homeXp">0</strong><span>experiência</span></div>
+              </article>
+              <article class="stat-card">
+                <div class="stat-icon blue">✓</div>
+                <div><small>Partidas</small><strong id="homePlayed">0</strong><span>concluídas</span></div>
+              </article>
+              <article class="stat-card">
+                <div class="stat-icon green">◎</div>
+                <div><small>Questões hoje</small><strong id="dailyCount">0 / 20</strong><span>meta diária</span></div>
+              </article>
+            </section>
+
+            <div class="home-grid">
+              <section class="main-card filters-card" id="filters">
+                <div class="card-head">
+                  <div><span class="eyebrow">TREINO PERSONALIZADO</span>
+                    <h2>Ajuste só o que quiser</h2>
+                  </div>
+                  <span class="bank-count" id="bankCount">Banco carregando...</span>
+                </div>
+                <div class="filter-grid">
+                  <div class="field wide">
+                    <label for="subjectSelect">Matéria</label>
+                    <select id="subjectSelect">
+                      <option value="todas">Todas as matérias</option>
+                      <option value="Português">Português</option>
+                      <option value="Literatura">Literatura</option>
+                      <option value="Redação">Redação</option>
+                      <option value="Inglês">Inglês</option>
+                      <option value="Matemática">Matemática</option>
+                      <option value="Raciocínio Lógico">Raciocínio Lógico</option>
+                      <option value="Informática">Informática</option>
+                      <option value="Direito Constitucional">Direito Constitucional</option>
+                      <option value="Direito Administrativo">Direito Administrativo</option>
+                      <option value="História">História</option>
+                      <option value="Geografia">Geografia</option>
+                      <option value="Filosofia">Filosofia</option>
+                      <option value="Sociologia">Sociologia</option>
+                      <option value="Conhecimentos do Edital">Conhecimentos do Edital</option>
+                      <option value="Biologia">Biologia</option>
+                      <option value="Física">Física</option>
+                      <option value="Química">Química</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="sourceSelect">Origem</label>
+                    <select id="sourceSelect">
+                      <option value="todas">Todas as origens</option>
+                      <option value="autorais">Questões autorais</option>
+                      <option value="oficiais">Adaptadas de provas oficiais</option>
+                      <option value="editais">Conteúdos dos editais / programas</option>
+                      <option value="editalENEM">Edital / matriz ENEM</option>
+                      <option value="editalFUVEST">Edital / programa FUVEST</option>
+                      <option value="editalUNESP">Edital / manual UNESP</option>
+                      <option value="editalUNICAMP">Edital / programa UNICAMP</option>
+                      <option value="enem2025">ENEM 2025</option>
+                      <option value="fuvest2025">FUVEST 2025</option>
+                      <option value="unesp2025">UNESP 2025</option>
+                      <option value="unicamp2025">UNICAMP 2025</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label>Dificuldade</label>
+                    <div class="segmented" id="difficultyGroup">
+                      <button class="active" data-difficulty="todas">Mista</button>
+                      <button data-difficulty="facil">Fácil</button>
+                      <button data-difficulty="medio">Médio</button>
+                      <button data-difficulty="dificil">Difícil</button>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label for="questionAmount">Quantidade</label>
+                    <select id="questionAmount">
+                      <option value="5">5 questões</option>
+                      <option selected="" value="10">10 questões</option>
+                      <option value="15">15 questões</option>
+                      <option value="20">20 questões</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="rotation-info">
+                  <div class="rotation-icon">↻</div>
+                  <div><strong>Rotação inteligente ativada</strong>
+                    <p>O site evita repetir as perguntas recentes e alterna a forma do enunciado automaticamente.</p>
+                  </div>
+                </div>
+                <button class="primary-btn full" id="btnStart">Iniciar treino personalizado <span>→</span></button>
+              </section>
+              <aside class="side-stack">
+                <section class="main-card daily-card">
+                  <span class="eyebrow">MISSÃO DE HOJE</span>
+                  <h3>20 questões</h3>
+                  <p>Complete sua meta diária para manter o ritmo.</p>
+                  <div class="progress-track">
+                    <div id="dailyProgress"></div>
+                  </div>
+                </section>
+                <section class="main-card recent-card">
+                  <div class="card-head compact">
+                    <div><span class="eyebrow">ROTAÇÃO DE QUESTÕES</span>
+                      <h3>Anti-repetição</h3>
+                    </div>
+                  </div>
+                  <p id="recentInfo">Nenhuma questão registrada ainda.</p>
+                  <button class="text-btn" id="btnClearHistory">Limpar rotação recente</button>
+                </section>
+                <section class="main-card progress-data-card">
+                  <span class="eyebrow">PROGRESSO E DADOS</span>
+                  <h3>Gerenciar XP</h3>
+                  <div class="progress-data-value"><strong id="sideXpValue">0 XP</strong><small id="sidePlayedValue">0
+                      partidas concluídas</small></div>
+                  <p>Se o XP ou as estatísticas ficarem fora do esperado, você pode zerar somente o XP ou reiniciar o
+                    desempenho. O histórico de respostas não é apagado por esses botões.</p>
+                  <div class="progress-data-actions"><button class="secondary-btn danger-soft" id="btnResetXp">Resetar
+                      XP</button><button class="secondary-btn" id="btnResetProgress">Resetar desempenho</button></div>
+                </section>
+              </aside>
+            </div>
+            <section class="answer-history-section" id="answerHistorySection">
+              <div class="section-title history-heading">
+                <div><span class="eyebrow">HISTÓRICO DE RESPOSTAS</span>
+                  <h2>Veja o que você já respondeu</h2>
+                  <p class="section-copy">Cada resposta fica salva neste navegador com a pergunta, sua alternativa, o
+                    gabarito e a explicação.</p>
+                </div>
+                <div class="history-head-actions"><select id="answerHistoryFilter" aria-label="Filtrar histórico">
+                    <option value="todos">Todas</option>
+                    <option value="acertos">Acertos</option>
+                    <option value="erros">Erros</option>
+                  </select><button class="secondary-btn" id="btnClearAnswerHistory">Limpar histórico</button></div>
+              </div>
+              <div class="history-summary-grid">
+                <article><small>Respondidas</small><strong id="historyTotal">0</strong></article>
+                <article><small>Acertos</small><strong id="historyCorrect">0</strong></article>
+                <article><small>Erros</small><strong id="historyWrong">0</strong></article>
+                <article><small>Aproveitamento</small><strong id="historyAccuracy">0%</strong></article>
+              </div>
+              <div class="answer-history-list" id="answerHistoryList">
+                <div class="history-empty">Responda uma questão para começar seu histórico.</div>
+              </div>
+              <div class="history-more-wrap"><button class="secondary-btn" id="btnHistoryMore">Mostrar mais</button>
+              </div>
+            </section>
+          </section>
+          <section class="public-bank-section" id="publicBankSection">
+            <div class="section-title public-title">
+              <div>
+                <span class="eyebrow">CONCURSOS PÚBLICOS</span>
+                <h2>Tipos de concurso, bancas e anos</h2>
+                <p class="section-copy">Escolha primeiro o tipo de concurso para iniciar um treino temático. Abaixo,
+                  consulte as principais bancas e abra o portal oficial para localizar editais, provas, gabaritos e
+                  concursos encerrados. O ano serve para organizar sua busca; a disponibilidade histórica depende do
+                  acervo de cada banca.</p>
+              </div>
+              <span class="public-count" id="publicBankCount">Carregando bancas...</span>
+            </div>
+            <div class="public-help-card">
+              <div><strong>Não sabe por onde começar?</strong><span>Para a maioria dos concursos de nível médio, comece
+                  por Português, Raciocínio Lógico e Informática.</span></div>
+              <button class="primary-btn" id="btnPublicStarter">Treino básico de concurso →</button>
+            </div>
+            <div class="public-subheading">
+              <div><span class="eyebrow">POR OBJETIVO</span>
+                <h3>Escolha o tipo de concurso</h3>
+                <p class="section-copy">A plataforma reúne carreiras administrativas, fiscais, controle, Justiça,
+                  segurança, militares, estatais, saúde, educação, tecnologia, ciência e concursos das três esferas.</p>
+              </div><small id="publicTypeCount">Carregando tipos...</small>
+            </div>
+            <div class="public-type-toolbar">
+              <div class="field"><label for="publicGroupFilter">Área</label><select id="publicGroupFilter">
+                  <option value="Todas">Todas as áreas</option>
+                </select></div>
+              <div class="field public-search-field"><label for="publicTypeSearch">Pesquisar tipo de
+                  concurso</label><input autocomplete="off" id="publicTypeSearch"
+                  placeholder="Ex.: INSS, tribunal, polícia, TI, Receita..." type="search" /></div>
+            </div>
+            <div class="public-type-grid" id="publicTypeGrid"></div>
+            <div class="public-subheading other-public-heading">
+              <div><span class="eyebrow">OUTRAS PROVAS PÚBLICAS</span>
+                <h3>Exames e processos seletivos públicos</h3>
+                <p class="section-copy">Mantivemos vestibulares e editais e adicionamos atalhos para outros exames
+                  públicos de educação, saúde e formação profissional.</p>
+              </div>
+            </div>
+            <div class="other-public-grid" id="otherPublicExamGrid"></div>
+            <div class="public-subheading banks-heading">
+              <div><span class="eyebrow">BANCAS ORGANIZADORAS</span>
+                <h3>Consulte a banca oficial</h3>
+              </div>
+            </div>
+            <div class="public-filter-card">
+              <div class="public-filter-grid">
+                <div class="field"><label for="publicBankFilter">Banca</label><select id="publicBankFilter">
+                    <option value="todas">Todas as bancas</option>
+                  </select></div>
+                <div class="field"><label for="publicYearFilter">Ano</label><select id="publicYearFilter">
+                    <option value="todos">Todos os anos</option>
+                  </select></div>
+                <div class="field public-search-field"><label for="publicSearch">Pesquisar</label><input
+                    autocomplete="off" id="publicSearch" placeholder="Ex.: Cebraspe, tribunal, banco..."
+                    type="search" /></div>
+              </div>
+              <div class="public-filter-note">Os links levam ao site da própria organizadora. Para provas antigas,
+                procure por “encerrados”, “provas anteriores” ou pelo ano escolhido.</div>
+            </div>
+            <div class="public-bank-grid" id="publicBankGrid"></div>
+          </section>
+          <section class="official-section" id="officialSources">
+            <div class="section-title">
+              <div><span class="eyebrow">FONTES OFICIAIS</span>
+                <h2>Vestibulares e provas oficiais</h2>
+                <p class="section-copy">Acesse as páginas oficiais das principais provas. Para estudar dentro do jogo,
+                  use “Vestibular”, “Provas reais” ou “Do edital à questão”.</p>
+              </div>
+            </div>
+            <div class="official-grid">
+              <a class="official-card" href="https://riep.inep.gov.br/items/ca4bcb51-f523-495b-8b49-704c0f155ba8"
+                rel="noopener" target="_blank"><span class="official-badge">INEP</span><strong>ENEM
+                  2025</strong><small>Cadernos e gabaritos oficiais do 1º e 2º dia.</small><b>Abrir acervo oficial
+                  ↗</b></a>
+              <a class="official-card" href="https://www.fuvest.br/acervo-vestibular/" rel="noopener"
+                target="_blank"><span class="official-badge">FUVEST</span><strong>Acervo Vestibular
+                  USP</strong><small>Acervo oficial da FUVEST por edição, com documentos, provas e
+                  gabaritos.</small><b>Abrir acervo oficial ↗</b></a>
+              <a class="official-card" href="https://www.vunesp.com.br/VNSP2404/" rel="noopener" target="_blank"><span
+                  class="official-badge">VUNESP</span><strong>UNESP 2025</strong><small>Página oficial do Vestibular
+                  Unesp 2025, com provas e gabaritos.</small><b>Abrir página oficial ↗</b></a>
+              <a class="official-card" href="https://www.comvest.unicamp.br/" rel="noopener" target="_blank"><span
+                  class="official-badge">COMVEST</span><strong>Vestibular Unicamp</strong><small>Portal oficial com
+                  provas anteriores e simulados baseados em edições passadas.</small><b>Abrir portal oficial ↗</b></a>
+            </div>
+          </section>
+          <section class="edital-section" id="editalArchiveSection">
+            <div class="section-title edital-heading">
+              <div>
+                <span class="eyebrow">EDITAIS E REGULAMENTOS</span>
+                <h2>Acervo por ano</h2>
+                <p class="section-copy">Escolha a prova, concurso público ou banca e o ano. Você pode abrir o acervo
+                  oficial ou iniciar um treino baseado no conteúdo catalogado.</p>
+              </div>
+              <span class="edital-total" id="editalTotal">Carregando...</span>
+            </div>
+            <div class="edital-filter-card">
+              <div class="edital-filter-grid">
+                <div class="field">
+                  <label for="editalInstitution">Instituição / prova</label>
+                  <select id="editalInstitution">
+                    <option value="todas">Todas as provas e concursos</option>
+                    <option value="CONCURSOS">Concursos Públicos</option>
+                    <option value="ENEM">ENEM / INEP</option>
+                    <option value="FUVEST">FUVEST / USP</option>
+                    <option value="UNESP">UNESP / VUNESP</option>
+                    <option value="UNICAMP">UNICAMP / COMVEST</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="editalYear">Ano</label>
+                  <select id="editalYear">
+                    <option value="todos">Todos os anos</option>
+                  </select>
+                </div>
+                <div class="field edital-search-field">
+                  <label for="editalSearch">Pesquisar</label>
+                  <input autocomplete="off" id="editalSearch" placeholder="Ex.: INSS, tribunal, Cebraspe, 2024..."
+                    type="search" />
+                </div>
+              </div>
+              <div class="edital-range-note" id="editalRangeNote"></div>
+            </div>
+            <div class="edital-summary-grid" id="editalSummary"></div>
+            <div class="edital-toolbar">
+              <div><strong id="editalShowing">Mostrando editais</strong><small>Vestibulares, concursos, bancas e links
+                  oficiais em um só acervo</small></div>
+              <button class="secondary-btn" id="btnEditalReset">Limpar filtros</button>
+            </div>
+            <div class="edital-grid" id="editalGrid"></div>
+            <div class="feed-more-wrap"><button class="secondary-btn feed-more" id="btnEditalMore">Carregar mais
+                anos</button></div>
+          </section>
+        </section>
+        <section class="screen" id="gameScreen">
+          <div class="game-toolbar">
+            <button class="secondary-btn" id="btnQuit">← Encerrar</button>
+            <div class="game-title"><span id="gameModeLabel">Modo Clássico</span><small id="gameSubjectLabel">Matérias
+                variadas</small></div>
+            <div class="hud">
+              <div class="hud-item"><span>⭐</span>
+                <div><small>Pontos</small><strong id="scoreValue">0</strong></div>
+              </div>
+              <div class="hud-item"><span>🔥</span>
+                <div><small>Combo</small><strong id="streakValue">0</strong></div>
+              </div>
+              <div class="hud-item hidden" id="livesHud"><span>❤️</span>
+                <div><small>Vidas</small><strong id="livesValue">3</strong></div>
+              </div>
+              <div class="hud-item hidden" id="timerHud"><span>⏱️</span>
+                <div><small>Tempo</small><strong id="timerValue">--</strong></div>
+              </div>
+            </div>
+          </div>
+          <div class="game-grid">
+            <section class="question-card main-card">
+              <div class="question-topline">
+                <div class="question-tags"><span class="tag subject" id="questionSubject">Português</span><span
+                    class="tag diff" id="questionDifficulty">Médio</span><span class="tag variant"
+                    id="variantBadge">Variação 1</span></div>
+                <span class="question-number" id="questionCounter">Questão 1</span>
+              </div>
+              <div class="question-progress">
+                <div id="questionProgressFill"></div>
+              </div>
+              <div class="question-source"><span id="questionSourceText">Questão autoral inspirada em formato de
+                  prova</span>
+                <div class="source-actions"><a class="official-link hidden" href="#" id="officialSourceLink"
+                    rel="noopener" target="_blank">Abrir prova oficial ↗</a><small id="rotationStatus">sem repetição
+                    recente</small></div>
+              </div>
+              <h2 id="questionText">Carregando questão...</h2>
+              <div class="options" id="optionsContainer"></div>
+              <div class="explanation hidden" id="explanationBox"><strong id="explanationTitle">Explicação</strong>
+                <p id="explanationText"></p>
+              </div>
+              <div class="question-actions">
+                <div class="joker-group"><button class="joker-btn" id="btnFifty">50/50 <span
+                      id="fiftyCount">2</span></button><button class="joker-btn" id="btnSkip">Pular <span
+                      id="skipCount">2</span></button></div>
+                <button class="primary-btn next-btn hidden" id="btnNext">Próxima questão →</button>
+              </div>
+            </section>
+            <aside class="game-side">
+              <section class="main-card performance-card">
+                <span class="eyebrow">SEU DESEMPENHO</span>
+                <div class="performance-ring" id="performanceRing"><span id="accuracyValue">0%</span></div>
+                <div class="mini-stats">
+                  <div><strong id="correctValue">0</strong><small>Acertos</small></div>
+                  <div><strong id="wrongValue">0</strong><small>Erros</small></div>
+                </div>
+              </section>
+              <section class="main-card combo-card"><span class="eyebrow">SEQUÊNCIA</span>
+                <h3 id="comboMessage">Acerte 3 seguidas para ganhar bônus.</h3>
+                <div class="combo-track">
+                  <div id="comboFill"></div>
+                </div>
+              </section>
+              <section class="main-card rotation-card"><span class="eyebrow">ROTAÇÃO</span>
+                <p>As últimas questões ficam bloqueadas temporariamente. Quando uma questão voltar, o enunciado recebe
+                  outra formulação.</p>
+              </section>
+            </aside>
+          </div>
+        </section>
+        <section class="screen" id="resultScreen">
+          <div class="result-card main-card">
+            <div class="result-icon" id="resultIcon">🏆</div>
+            <span class="eyebrow">RESULTADO</span>
+            <h2 id="resultTitle">Mandou bem!</h2>
+            <p id="resultSubtitle">Veja seu desempenho nesta rodada.</p>
+            <div class="result-score"><strong id="finalScore">0</strong><span>pontos</span></div>
+            <div class="result-grid">
+              <div><strong id="finalCorrect">0</strong><span>Acertos</span></div>
+              <div><strong id="finalWrong">0</strong><span>Erros</span></div>
+              <div><strong id="finalAccuracy">0%</strong><span>Aproveitamento</span></div>
+              <div><strong id="finalBestStreak">0</strong><span>Maior combo</span></div>
+            </div>
+            <div class="result-actions"><button class="primary-btn" id="btnPlayAgain">Jogar novamente</button><button
+                class="secondary-btn" id="btnHome">Voltar ao painel</button></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="questions.js"></script>
+  <script src="real-questions.js"></script>
+  <script src="extra-real-questions.js"></script>
+  <script src="edital-questions.js"></script>
+  <script src="more-edital-questions.js"></script>
+  <script src="script.js"></script>
+
+  <script src="public-exams.js"></script>
+  <script src="editais.js"></script>
+</body>
+
+</html>

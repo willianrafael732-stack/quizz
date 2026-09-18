@@ -8,8 +8,9 @@
   <meta
     content="Plataforma de estudos para concursos públicos, vestibulares e provas públicas, com catálogo de carreiras, bancas, anos, editais e treinos por matéria."
     name="description" />
-  <title>Desafio Aprovação V10</title>
+  <title>Desafio Aprovação — Simulados</title>
   <link href="style.css" rel="stylesheet" />
+  <link href="exam.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -3229,9 +3230,9 @@
           <div class="page-heading">
             <div>
               <span class="eyebrow">ESTUDE SEM COMPLICAÇÃO</span>
-              <h1>Escolha seu objetivo e comece a responder</h1>
+              <h1>Prepare sua próxima prova</h1>
               <p>Vestibular ou concurso público: escolha uma área, matéria ou banca. O site monta o treino e cuida da
-                rotação das perguntas para você.</p>
+                simulado para você, com revisão das respostas e gabarito ao finalizar.</p>
             </div>
             <button class="primary-btn" id="btnStartTop">Montar meu treino <span>→</span></button>
           </div>
@@ -3404,7 +3405,9 @@
                     <p>O site evita repetir as perguntas recentes e alterna a forma do enunciado automaticamente.</p>
                   </div>
                 </div>
-                <button class="primary-btn full" id="btnStart">Iniciar treino personalizado <span>→</span></button>
+                <label class="exam-toggle"><input type="checkbox" id="examFormat" checked /> Formato de prova — correção somente ao finalizar</label>
+                <p class="exam-note">Use a quantidade selecionada. Você pode voltar às questões e alterar suas respostas antes de entregar. Desmarque para usar os modos de treino.</p>
+                <button class="primary-btn full" id="btnStart">Começar simulado <span>→</span></button>
               </section>
               <aside class="side-stack">
                 <section class="main-card daily-card">
@@ -3699,6 +3702,7 @@
 
   <script src="public-exams.js"></script>
   <script src="editais.js"></script>
+  <script src="exam.js"></script>
 </body>
 
 </html>

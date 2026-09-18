@@ -200,6 +200,7 @@ function handleQuickSearch(e){
 }
 
 function startGame(){
+  if(document.querySelector('#examFormat')?.checked){ startExam(); return; }
   clearInterval(state.timer);
   Object.assign(state,{score:0,correct:0,wrong:0,streak:0,bestStreak:0,lives:3,answered:0,current:null,sessionIds:new Set(),locked:false,fifty:2,skips:2,timeLeft:0,lastSubjects:[],statsCommitted:false});
   state.subject=$('#subjectSelect').value;
@@ -473,7 +474,7 @@ function questionSourceLabel(q){
 function recordAnswerHistory(selected,correct){
   const q=state.current;
   if(!q) return;
-  const selectedText=q.options?.[selected] ?? 'Alternativa não registrada';
+  const selectedText=selected===null ? 'Em branco' : (q.options?.[selected] ?? 'Alternativa não registrada');
   const correctText=q.options?.[q.answer] ?? 'Gabarito não registrado';
   answerHistory.unshift({
     uid:`${Date.now()}-${Math.random().toString(36).slice(2,8)}`,

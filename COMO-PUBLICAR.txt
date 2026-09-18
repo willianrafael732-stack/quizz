@@ -1,0 +1,25 @@
+DESAFIO APROVAÇÃO — NETLIFY
+
+Este pacote contém index.html diretamente na raiz, junto dos arquivos CSS e JavaScript.
+Não exige instalação, framework ou comando de compilação.
+
+ENVIO MANUAL
+1. Extraia o ZIP.
+2. Abra a pasta e confira se index.html aparece diretamente dentro dela.
+3. No projeto existente no Netlify, abra Deploys e envie essa pasta na área de implantação manual.
+
+REPOSITÓRIO GIT
+Copie o conteúdo deste pacote para a raiz do repositório do quiz, incluindo netlify.toml.
+Deixe Base directory e Package directory vazios e Publish directory como ponto (.).
+Não configure comando de build. Faça commit e push para a branch conectada ao Netlify.
+Se preferir manter tudo dentro de desafio-aprovacao-quiz-v10, use essa pasta como Base directory,
+com netlify.toml dentro dela e Publish directory como ponto (.).
+
+VERIFICAÇÃO
+Na implantação publicada, confira no navegador de arquivos se index.html está na raiz
+e se style.css, exam.css e os arquivos JavaScript estão presentes.
+
+Este projeto troca telas dentro de index.html; não usa rotas de SPA nem SSR.
+Não é necessário redirecionar qualquer caminho para index.html.
+Nenhum cadastro com senha própria foi acrescentado a este pacote.
+A publicação efetiva no Netlify depende do envio deste pacote ou do push no repositório conectado.

@@ -3210,7 +3210,6 @@
         <small>Continue treinando para fechar sua meta.</small>
       </div>
       <div class="sidebar-bottom">
-        <button class="icon-action" id="btnSound" title="Som">🔊</button>
         <button class="icon-action" id="btnTheme" title="Tema">☀️</button>
       </div>
     </aside>
@@ -3331,6 +3330,28 @@
               </article>
             </section>
 
+          <section class="inss-ethics-panel" id="inssEthicsSection" aria-labelledby="inssEthicsHeading">
+            <div class="inss-ethics-top">
+              <div><span class="inss-ethics-eyebrow">🏛️ INSS • EDITAL 2022 • CONHECIMENTOS BÁSICOS</span>
+                <h2 id="inssEthicsHeading">Ética no Serviço Público</h2>
+                <p>Conteúdo do edital apresentado na imagem: Código de Ética e Sistema de Gestão da Ética do Poder Executivo Federal, <strong>com suas alterações</strong>.</p>
+              </div>
+              <span class="inss-ethics-stat">32 questões autorais</span>
+            </div>
+            <div class="inss-ethics-columns">
+              <article><strong>📘 Decreto nº 1.171/1994</strong><p>Regras deontológicas, moralidade, deveres, proibições e censura ética.</p>
+                <a href="https://www.planalto.gov.br/ccivil_03/decreto/d1171.htm" target="_blank" rel="noopener noreferrer">Ler decreto oficial ↗</a></article>
+              <article><strong>⚖️ Decreto nº 6.029/2007</strong><p>CEP, comissões setoriais, Rede de Ética, apuração, contraditório e ampla defesa.</p>
+                <a href="https://www.planalto.gov.br/ccivil_03/_ato2007-2010/2007/decreto/d6029.htm" target="_blank" rel="noopener noreferrer">Ler decreto oficial ↗</a></article>
+            </div>
+            <div class="inss-ethics-footer">
+              <button type="button" class="inss-ethics-start" id="btnInssEthics">🎯 Treinar Ética do INSS →</button>
+              <a href="inss-etica.html" class="inss-ethics-guide">📚 Abrir resumo da matéria</a>
+              <a href="https://www.gov.br/inss/pt-br/centrais-de-conteudo/legislacao/edital/2022" target="_blank" rel="noopener noreferrer" class="inss-ethics-edital">Edital INSS 2022 ↗</a>
+            </div>
+            <small>Questões originais para estudo. A foto mostra conteúdo do edital de 2022, não um edital novo de 2026.</small>
+          </section>
+
             <div class="home-grid">
               <section class="main-card filters-card" id="filters">
                 <div class="card-head">
@@ -3353,6 +3374,8 @@
                       <option value="Informática">Informática</option>
                       <option value="Direito Constitucional">Direito Constitucional</option>
                       <option value="Direito Administrativo">Direito Administrativo</option>
+                      <option value="Administração Pública">Administração Pública</option>
+                      <option value="Ética no Serviço Público">Ética no Serviço Público</option>
                       <option value="História">História</option>
                       <option value="Geografia">Geografia</option>
                       <option value="Filosofia">Filosofia</option>
@@ -3407,6 +3430,8 @@
                 </div>
                 <label class="exam-toggle"><input type="checkbox" id="examFormat" checked /> Formato de prova — correção somente ao finalizar</label>
                 <p class="exam-note">Use a quantidade selecionada. Você pode voltar às questões e alterar suas respostas antes de entregar. Desmarque para usar os modos de treino.</p>
+                <label class="exam-toggle smart-bot-toggle"><input type="checkbox" id="smartQuestionBot" checked /> Gerador inteligente de questões</label>
+                <p class="exam-note">Cria questões autorais coerentes com a matéria e com a área do concurso selecionado, usando modelos validados e sem mostrar a resposta antes da entrega.</p>
                 <button class="primary-btn full" id="btnStart">Começar simulado <span>→</span></button>
               </section>
               <aside class="side-stack">
@@ -3647,6 +3672,7 @@
                 <div class="joker-group"><button class="joker-btn" id="btnFifty">50/50 <span
                       id="fiftyCount">2</span></button><button class="joker-btn" id="btnSkip">Pular <span
                       id="skipCount">2</span></button></div>
+                <button class="mind-map-btn" id="btnMindMap" type="button">🧠 Mapa mental</button>
                 <button class="primary-btn next-btn hidden" id="btnNext">Próxima questão →</button>
               </div>
             </section>
@@ -3694,14 +3720,17 @@
   </div>
   <div class="toast" id="toast"></div>
   <script src="questions.js"></script>
+  <script src="concurso-mega-bank.js"></script>
   <script src="real-questions.js"></script>
   <script src="extra-real-questions.js"></script>
   <script src="edital-questions.js"></script>
   <script src="more-edital-questions.js"></script>
+  <script src="inss-etica-questions.js"></script>
   <script src="script.js"></script>
 
   <script src="public-exams.js"></script>
   <script src="editais.js"></script>
+  <script src="study-tools.js"></script>
   <script src="exam.js"></script>
 </body>
 

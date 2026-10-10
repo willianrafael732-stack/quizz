@@ -50,9 +50,13 @@
     bankId:b.id, url:b.url, tags:b.tags || []
   }));
 
-  const allRecords = [...vestibularRecords, ...publicTypes, ...publicBanks];
+  const inssRecords = [{type:'edition', institution:'INSS', bank:'CEBRASPE', year:2022,
+    title:'INSS 2022 — Técnico do Seguro Social', kind:'Edital nº 1/2022 • Ética no Serviço Público',
+    url:'https://www.gov.br/inss/pt-br/centrais-de-conteudo/legislacao/edital/2022', direct:true,
+    note:'Treino autoral do tópico Ética no Serviço Público: Decretos nº 1.171/1994 e nº 6.029/2007, com alterações.'}];
+  const allRecords = [...vestibularRecords, ...inssRecords, ...publicTypes, ...publicBanks];
   const ranges = {
-    ENEM: '2009–2026', FUVEST: '1977–2027', UNESP: '2018–2027', UNICAMP: '1989–2027'
+    ENEM: '2009–2026', FUVEST: '1977–2027', UNESP: '2018–2027', UNICAMP: '1989–2027', INSS:'2022'
   };
 
   let limit = 24;
@@ -81,6 +85,7 @@
       </optgroup>
       <optgroup label="Concursos públicos">
         <option value="CONCURSOS">Todos os concursos públicos</option>
+        <option value="INSS">INSS 2022 (Técnico)</option>
         <option value="CONCURSO-TIPOS">Áreas e carreiras de concurso</option>
         <option value="CONCURSO-BANCAS">Bancas organizadoras</option>
       </optgroup>`;
@@ -101,6 +106,7 @@
       {value:'FUVEST', bank:'USP', name:'FUVEST', range:'1977–2027', count:'51 edições'},
       {value:'UNESP', bank:'VUNESP', name:'UNESP', range:'2018–2027', count:'10 edições'},
       {value:'UNICAMP', bank:'COMVEST', name:'UNICAMP', range:'1989–2027', count:'39 edições'},
+      {value:'INSS', bank:'CEBRASPE', name:'INSS 2022', range:'Ética no Serviço Público', count:'Edital + treino'},
       {value:'CONCURSOS', bank:'CONCURSOS', name:'CONCURSOS PÚBLICOS', range:'Áreas + bancas', count:`${publicTypes.length} tipos • ${publicBanks.length} bancas`}
     ];
     el.innerHTML=configs.map(c=>`<button class="edital-summary-card${c.value==='CONCURSOS'?' public-summary-card':''}" data-inst="${c.value}"><span>${c.bank}</span><strong>${c.name}</strong><b>${c.range}</b><small>${c.count} catalogados</small></button>`).join('');
@@ -200,7 +206,8 @@
     }));
     grid.querySelectorAll('[data-public-type]').forEach(btn=>btn.addEventListener('click',()=>{
       const t=(catalog.types||[]).find(x=>x.id===btn.dataset.publicType);
-      if(t) window.startPublicThemeTraining?.(t.title,t.subjects||[]);
+      if(t?.id==='inss-etica') window.startInssEthicsTraining?.();
+      else if(t) window.startPublicThemeTraining?.(t.title,t.subjects||[]);
     }));
     grid.querySelectorAll('[data-public-bank]').forEach(btn=>btn.addEventListener('click',()=>{
       const b=(catalog.banks||[]).find(x=>x.id===btn.dataset.publicBank);
@@ -230,7 +237,7 @@
       const y=publicYear();
       byId('editalRangeNote').innerHTML=`<strong>Concursos públicos:</strong> ${publicTypes.length} áreas e ${publicBanks.length} bancas catalogadas.${y?` O ano ${y} será usado como referência ao consultar os acervos das bancas.`:' Escolha um ano se quiser direcionar a busca nos portais oficiais.'}`;
     } else if(inst==='todas') {
-      byId('editalRangeNote').innerHTML=`<strong>Acervo:</strong> ENEM ${ranges.ENEM} • FUVEST ${ranges.FUVEST} • UNESP ${ranges.UNESP} • UNICAMP ${ranges.UNICAMP} • ${publicTypes.length} áreas de concurso • ${publicBanks.length} bancas`;
+      byId('editalRangeNote').innerHTML=`<strong>Acervo:</strong> ENEM ${ranges.ENEM} • FUVEST ${ranges.FUVEST} • UNESP ${ranges.UNESP} • UNICAMP ${ranges.UNICAMP} • INSS 2022 • ${publicTypes.length} áreas de concurso • ${publicBanks.length} bancas`;
     } else {
       byId('editalRangeNote').innerHTML = `<strong>${inst}:</strong> anos catalogados ${ranges[inst]}.`;
     }

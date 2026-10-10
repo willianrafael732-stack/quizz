@@ -6,13 +6,14 @@ const MODE_NAMES = {
   contraTempo:'Contra o Tempo', vestibular:'Vestibular', concurso:'Concurso Público', provasReais:'Provas Reais', edital:'Do Edital à Questão', publicoTematico:'Concurso por Área'
 };
 const VESTIBULAR_SUBJECTS = ['Português','Literatura','Redação','Inglês','Matemática','História','Geografia','Filosofia','Sociologia','Biologia','Física','Química'];
-const CONCURSO_SUBJECTS = ['Português','Matemática','Raciocínio Lógico','Informática','Direito Constitucional','Direito Administrativo'];
+const CONCURSO_SUBJECTS = ['Português','Matemática','Raciocínio Lógico','Informática','Direito Constitucional','Direito Administrativo','Administração Pública','Ética no Serviço Público'];
 const HISTORY_KEY = 'da_recent_question_history_v2';
 const VARIANT_KEY = 'da_question_variant_history_v2';
 const MAX_HISTORY = 45;
 const ANSWER_HISTORY_KEY = 'da_answer_history_v1';
 const MAX_ANSWER_HISTORY = 300;
 const ANSWER_HISTORY_PAGE = 8;
+const THEME_KEY = 'da_theme';
 
 // Segunda formulação, semanticamente equivalente, para cada questão-base.
 const QUESTION_ALT_TEXT = {
@@ -94,7 +95,7 @@ const SUBJECT_INTROS = {
 const state = {
   mode:'classico', difficulty:'todas', subject:'todas', source:'todas', score:0, correct:0, wrong:0, streak:0, bestStreak:0,
   lives:3, answered:0, current:null, sessionIds:new Set(), locked:false, fifty:2, skips:2,
-  timeLeft:0, timer:null, sound:true, targetQuestions:10, lastSubjects:[], variantIndex:0, editalInstitution:null, editalYear:null, editalUrl:null, publicSubjects:null, publicThemeLabel:null, statsCommitted:false
+  timeLeft:0, timer:null, targetQuestions:10, lastSubjects:[], variantIndex:0, editalInstitution:null, editalYear:null, editalUrl:null, publicSubjects:null, publicThemeLabel:null, statsCommitted:false
 };
 
 function safeNumber(value){
@@ -141,11 +142,25 @@ let variantHistory = loadVariantHistory();
 let answerHistory = loadAnswerHistory();
 let historyVisible = ANSWER_HISTORY_PAGE;
 
+applySavedTheme();
 bindEvents();
 refreshHomeStats();
 updateBankCount();
 updateRecentInfo();
 renderAnswerHistory();
+updateThemeButton();
+
+function applySavedTheme(){
+  try{
+    const saved=localStorage.getItem(THEME_KEY);
+    if(saved==='dark') document.body.classList.add('dark');
+    else if(saved==='light') document.body.classList.remove('dark');
+  }catch{}
+}
+function updateThemeButton(){
+  const btn=$('#btnTheme');
+  if(btn) btn.textContent=document.body.classList.contains('dark')?'🌙':'☀️';
+}
 
 function bindEvents(){
   $$('.mode-card').forEach(card => card.addEventListener('click', () => {
@@ -175,7 +190,6 @@ function bindEvents(){
   $('#btnQuit').addEventListener('click', ()=>finishGame(true));
   $('#btnPlayAgain').addEventListener('click', startGame);
   $('#btnHome').addEventListener('click', showHome);
-  $('#btnSound').addEventListener('click', toggleSound);
   $('#btnTheme').addEventListener('click', toggleTheme);
   $('#btnClearHistory').addEventListener('click', clearRotationHistory);
   $('#btnResetXp')?.addEventListener('click', resetXp);
@@ -218,6 +232,146 @@ function startGame(){
   showScreen('gameScreen'); updateHud();
   if(state.mode==='contraTempo') startTimer();
   nextQuestion();
+}
+
+function smartBotEnabled(){return document.querySelector('#smartQuestionBot')?.checked!==false;}
+function contestContextLabel(){
+  if(state.mode==='publicoTematico' && state.publicThemeLabel) return state.publicThemeLabel;
+  if(state.mode==='edital' && state.editalInstitution) return state.editalInstitution;
+  return 'Concurso Público';
+}
+function smartQuestionSubjects(){
+  const supported=Object.keys(SMART_QUESTION_TEMPLATES);
+  if(state.subject!=='todas' && supported.includes(state.subject)) return [state.subject];
+  if(state.mode==='publicoTematico' && Array.isArray(state.publicSubjects)){
+    const subjects=state.publicSubjects.filter(x=>supported.includes(x));
+    if(subjects.length) return subjects;
+  }
+  if(state.mode==='edital'){
+    let edital=QUESTION_BANK.filter(q=>q.editalBased && (!state.editalInstitution || q.institutions?.includes(state.editalInstitution)));
+    const subjects=[...new Set(edital.map(q=>q.subject))].filter(x=>supported.includes(x));
+    if(subjects.length) return subjects;
+  }
+  if(state.mode==='concurso' || state.mode==='publicoTematico' || state.mode==='edital') return CONCURSO_SUBJECTS.filter(x=>supported.includes(x));
+  return supported.includes(state.subject)?[state.subject]:[];
+}
+function shuffleSmartOptions(correct,wrong){
+  const items=[{text:String(correct),ok:true},...wrong.map(x=>({text:String(x),ok:false}))].sort(()=>Math.random()-.5);
+  return {options:items.map(x=>x.text),answer:items.findIndex(x=>x.ok)};
+}
+function makeSmartQuestion(subject,data){
+  const {options,answer}=shuffleSmartOptions(data.correct,data.wrong);
+  return {id:`bot-${Date.now()}-${Math.random().toString(36).slice(2,9)}`,subject,difficulty:data.difficulty||'medio',q:data.q,options,answer,explanation:data.explanation,bank:'Gerador inteligente',exam:`Autoral · ${contestContextLabel()}`,_smartBot:true};
+}
+const SMART_QUESTION_TEMPLATES={
+  'Português':()=>{
+    const bank=[
+      {q:'Assinale a alternativa em que o emprego da crase está de acordo com a norma-padrão.',correct:'O servidor dirigiu-se à repartição antes do expediente.',wrong:['O servidor entregou o relatório à ela.','A reunião ocorrerá daqui à duas horas.','O documento foi enviado à partir de segunda-feira.'],explanation:'Há crase em “à repartição” porque ocorre a fusão da preposição “a” com o artigo feminino “a”.',difficulty:'medio'},
+      {q:'Em qual alternativa a concordância verbal está correta segundo a norma-padrão?',correct:'Faltam dois documentos para concluir o processo.',wrong:['Falta dois documentos para concluir o processo.','Houveram muitas solicitações no setor.','Fazem três anos que o sistema foi implantado.'],explanation:'O verbo “faltar” concorda com o sujeito “dois documentos”. Em sentido de existir, “haver” é impessoal; indicando tempo decorrido, “fazer” também é impessoal.',difficulty:'medio'},
+      {q:'Assinale a frase em que a pontuação preserva corretamente a estrutura sintática e o sentido.',correct:'Quando o prazo terminou, a comissão encerrou o recebimento.',wrong:['Quando, o prazo terminou a comissão encerrou o recebimento.','A comissão, encerrou o recebimento quando o prazo terminou.','Quando o prazo, terminou a comissão encerrou o recebimento.'],explanation:'A oração adverbial deslocada “Quando o prazo terminou” deve ser separada por vírgula da oração principal.',difficulty:'facil'}
+    ]; return bank[rand(0,bank.length-1)];
+  },
+  'Matemática':()=>{
+    const kind=rand(0,2);
+    if(kind===0){const total=rand(12,40)*10,pct=[10,15,20,25,30][rand(0,4)],ans=total*pct/100;return{q:`Em um concurso, ${pct}% de ${total} candidatos faltaram à prova. Quantos candidatos faltaram?`,correct:ans,wrong:[ans+10,Math.max(0,ans-10),total-ans],explanation:`${pct}% de ${total} = ${pct/100} × ${total} = ${ans}.`,difficulty:'medio'};}
+    if(kind===1){const x=rand(3,15),a=rand(2,7),b=rand(2,12),res=a*x+b;return{q:`Resolva a equação ${a}x + ${b} = ${res}.`,correct:x,wrong:[x+1,Math.max(1,x-1),x+3],explanation:`Subtraindo ${b} dos dois lados, temos ${a}x = ${res-b}. Dividindo por ${a}, x = ${x}.`,difficulty:'medio'};}
+    const n=rand(4,9),dias=rand(8,18),novo=n+rand(2,6),ans=n*dias/novo;const rounded=Math.round(ans*100)/100;return{q:`Uma equipe de ${n} servidores conclui uma tarefa em ${dias} dias, com produtividade constante. Mantidas as condições, ${novo} servidores levariam aproximadamente quantos dias?`,correct:String(rounded).replace('.',','),wrong:[String(Math.round((rounded+2)*100)/100).replace('.',','),String(Math.max(1,Math.round((rounded-2)*100)/100)).replace('.',','),String(dias).replace('.',',')],explanation:`O trabalho total é constante: ${n} × ${dias} = ${n*dias} servidor-dias. Dividindo por ${novo}, obtemos aproximadamente ${String(rounded).replace('.',',')} dias.`,difficulty:'dificil'};
+  },
+  'Raciocínio Lógico':()=>{
+    const bank=[
+      {q:'A negação lógica de “Todos os candidatos entregaram a documentação” é:',correct:'Pelo menos um candidato não entregou a documentação.',wrong:['Nenhum candidato entregou a documentação.','Todos os candidatos deixaram de entregar a documentação.','Pelo menos um candidato entregou a documentação.'],explanation:'A negação de uma proposição universal afirmativa é uma proposição existencial negativa: existe ao menos um elemento que não satisfaz a propriedade.',difficulty:'medio'},
+      {q:'A proposição “Se o recurso foi deferido, então o resultado será retificado” é falsa somente quando:',correct:'O recurso foi deferido e o resultado não foi retificado.',wrong:['O recurso não foi deferido e o resultado foi retificado.','O recurso não foi deferido e o resultado não foi retificado.','O recurso foi deferido e o resultado foi retificado.'],explanation:'Uma implicação P → Q é falsa apenas quando P é verdadeira e Q é falsa.',difficulty:'medio'},
+      {q:'Considere: “Todo analista é servidor” e “Nenhum servidor temporário é analista”. Qual conclusão é compatível com as premissas?',correct:'Nenhum analista é servidor temporário.',wrong:['Todo servidor é analista.','Todo servidor temporário é analista.','Nenhum servidor é analista.'],explanation:'Se todo analista pertence ao conjunto dos servidores e nenhum temporário pode ser analista, então analistas e servidores temporários não se intersectam.',difficulty:'dificil'}
+    ]; return bank[rand(0,bank.length-1)];
+  },
+  'Informática':()=>{
+    const bank=[
+      {q:'Em segurança da informação, qual prática reduz o impacto de um ataque de ransomware?',correct:'Manter backups periódicos, testados e isolados do ambiente principal.',wrong:['Desativar todas as atualizações do sistema.','Usar a mesma senha em todos os serviços.','Abrir anexos desconhecidos em modo administrador.'],explanation:'Backups testados e isolados permitem restaurar dados mesmo que arquivos do ambiente principal sejam cifrados.',difficulty:'medio'},
+      {q:'Qual é a principal função do DNS em uma rede TCP/IP?',correct:'Traduzir nomes de domínio em endereços IP e realizar consultas relacionadas.',wrong:['Criptografar automaticamente todos os arquivos do usuário.','Substituir o roteador na distribuição física da rede.','Executar planilhas em servidores remotos.'],explanation:'O DNS resolve nomes, como um domínio, para endereços IP e outros registros associados.',difficulty:'facil'},
+      {q:'Ao receber uma mensagem que imita um banco e pede senha por um link, o comportamento mais seguro é:',correct:'Não acessar o link e verificar a solicitação pelos canais oficiais da instituição.',wrong:['Responder à mensagem com a senha para confirmar a identidade.','Instalar o arquivo anexo para validar a conta.','Encaminhar a mensagem para colegas e pedir que testem o link.'],explanation:'Esse padrão é típico de phishing. A verificação deve ser feita por canal oficial, sem usar o link recebido.',difficulty:'facil'}
+    ]; return bank[rand(0,bank.length-1)];
+  },
+  'Direito Constitucional':()=>{
+    const bank=[
+      {q:'Segundo o caput do art. 37 da Constituição Federal, qual princípio está expressamente previsto para a Administração Pública?',correct:'Impessoalidade.',wrong:['Supremacia administrativa.','Indisponibilidade absoluta.','Autonomia da vontade.'],explanation:'O art. 37, caput, prevê legalidade, impessoalidade, moralidade, publicidade e eficiência.',difficulty:'facil'},
+      {q:'O mandado de segurança destina-se, em regra, à proteção de:',correct:'Direito líquido e certo não amparado por habeas corpus ou habeas data.',wrong:['Qualquer interesse econômico sem prova pré-constituída.','Liberdade de locomoção ameaçada por ilegalidade, exclusivamente.','Apenas direitos coletivos de partidos políticos.'],explanation:'A Constituição prevê mandado de segurança para proteger direito líquido e certo não amparado por habeas corpus ou habeas data.',difficulty:'medio'},
+      {q:'No sistema constitucional brasileiro, os Poderes da União são:',correct:'Legislativo, Executivo e Judiciário, independentes e harmônicos entre si.',wrong:['Executivo, Moderador e Judiciário.','Legislativo, Ministério Público e Judiciário.','Executivo, Tribunal de Contas e Legislativo.'],explanation:'O art. 2º da Constituição estabelece Legislativo, Executivo e Judiciário, independentes e harmônicos entre si.',difficulty:'facil'}
+    ]; return bank[rand(0,bank.length-1)];
+  },
+  'Direito Administrativo':()=>{
+    const bank=[
+      {q:'Quando a Administração desfaz um ato administrativo por ilegalidade, ocorre:',correct:'Anulação.',wrong:['Revogação por conveniência.','Convalidação obrigatória.','Caducidade legislativa automática.'],explanation:'A anulação decorre de ilegalidade; a revogação está ligada a juízo de conveniência e oportunidade sobre ato válido.',difficulty:'facil'},
+      {q:'O poder de polícia administrativa permite à Administração:',correct:'Condicionar ou restringir direitos e atividades em benefício do interesse coletivo, nos limites legais.',wrong:['Criar crimes sem previsão em lei.','Julgar definitivamente qualquer conflito privado.','Ignorar o devido processo em toda sanção administrativa.'],explanation:'O poder de polícia limita ou condiciona direitos e atividades para proteção do interesse público, sempre sujeito à legalidade.',difficulty:'medio'},
+      {q:'A distribuição interna de competências dentro da mesma pessoa jurídica administrativa é denominada:',correct:'Desconcentração.',wrong:['Descentralização.','Privatização.','Concessão legislativa.'],explanation:'Desconcentração ocorre dentro da mesma pessoa jurídica; descentralização envolve outra pessoa jurídica ou particular.',difficulty:'medio'}
+    ]; return bank[rand(0,bank.length-1)];
+  },
+  'Administração Pública':()=>{
+    const bank=[
+      {q:'Em gestão pública, eficiência está mais diretamente relacionada a:',correct:'Utilizar recursos de modo adequado para produzir resultados com menor desperdício.',wrong:['Atingir qualquer objetivo, independentemente dos recursos gastos.','Cumprir apenas metas políticas sem indicadores.','Eliminar controles e registros para acelerar processos.'],explanation:'Eficiência relaciona meios e recursos empregados aos produtos ou resultados obtidos, buscando melhor uso dos recursos.',difficulty:'medio'},
+      {q:'No ciclo PDCA, a etapa “Check” corresponde principalmente a:',correct:'Verificar resultados e compará-los com o que foi planejado.',wrong:['Executar as ações planejadas.','Definir objetivos e métodos.','Padronizar sem medir resultados.'],explanation:'PDCA: Plan (planejar), Do (executar), Check (verificar) e Act (agir corretivamente/padronizar melhorias).',difficulty:'facil'},
+      {q:'Um indicador de efetividade procura medir principalmente:',correct:'O impacto ou mudança produzida pela ação pública na realidade.',wrong:['Somente o custo unitário de cada atividade.','A quantidade de documentos arquivados.','A existência formal de um organograma.'],explanation:'Efetividade está ligada aos impactos e transformações produzidas, e não apenas à execução ou ao uso de recursos.',difficulty:'dificil'}
+    ]; return bank[rand(0,bank.length-1)];
+  },
+  'Ética no Serviço Público':()=>{
+    const bank=[
+      {q:'Diante de um possível conflito entre interesse particular e função pública, a conduta mais compatível com a integridade é:',correct:'Declarar o conflito e adotar as medidas de impedimento ou tratamento previstas nas regras aplicáveis.',wrong:['Ocultar a situação se não houver denúncia.','Usar informação interna para obter vantagem pessoal.','Transferir informalmente a decisão a um amigo sem registro.'],explanation:'Integridade exige transparência sobre conflitos e adoção dos mecanismos de prevenção e tratamento previstos.',difficulty:'medio'},
+      {q:'A impessoalidade no serviço público exige que o agente:',correct:'Atue orientado pelo interesse público, sem favorecimentos pessoais indevidos.',wrong:['Priorize parentes quando considerar que são mais confiáveis.','Use a função para promover sua imagem pessoal.','Escolha destinatários de benefícios sem critérios objetivos.'],explanation:'A impessoalidade afasta favorecimentos e perseguições pessoais e orienta a atuação para a finalidade pública.',difficulty:'facil'},
+      {q:'Ao lidar com informação funcional protegida por sigilo legal, o servidor deve:',correct:'Restringir o acesso às hipóteses e pessoas autorizadas, observando as normas aplicáveis.',wrong:['Divulgar em grupo privado porque não é publicação oficial.','Compartilhar com colegas sem necessidade funcional.','Publicar após retirar apenas o nome do arquivo.'],explanation:'O dever de sigilo depende da norma e da finalidade; acesso e compartilhamento devem ocorrer somente quando autorizados e necessários.',difficulty:'medio'}
+    ]; return bank[rand(0,bank.length-1)];
+  },
+  'História':()=>{
+    const bank=[
+      {q:'A Constituição brasileira conhecida como “Constituição Cidadã” foi promulgada em:',correct:'1988.',wrong:['1964.','1977.','1994.'],explanation:'A Constituição da República Federativa do Brasil foi promulgada em 5 de outubro de 1988.',difficulty:'facil'},
+      {q:'A Proclamação da República no Brasil ocorreu em:',correct:'1889.',wrong:['1822.','1888.','1930.'],explanation:'A República foi proclamada em 15 de novembro de 1889.',difficulty:'facil'},
+      {q:'Entre os efeitos associados à Revolução Industrial, destaca-se:',correct:'A ampliação da produção mecanizada e da urbanização.',wrong:['O desaparecimento imediato das cidades.','A substituição completa do trabalho assalariado pelo servil.','O fim do comércio internacional europeu.'],explanation:'A industrialização ampliou a mecanização, a produção fabril e o crescimento urbano.',difficulty:'medio'}
+    ]; return bank[rand(0,bank.length-1)];
+  },
+  'Geografia':()=>{
+    const bank=[
+      {q:'O deslocamento populacional do campo para as cidades é denominado:',correct:'Êxodo rural.',wrong:['Transumância.','Migração pendular.','Imigração sazonal.'],explanation:'Êxodo rural é a migração do meio rural para o urbano.',difficulty:'facil'},
+      {q:'O bioma predominante em grande parte da região Norte do Brasil é:',correct:'Amazônia.',wrong:['Pampa.','Caatinga.','Mata de Araucárias.'],explanation:'A Floresta Amazônica ocupa a maior parte da região Norte.',difficulty:'facil'},
+      {q:'A latitude é medida a partir:',correct:'Da Linha do Equador, variando para norte ou sul.',wrong:['Do Meridiano de Greenwich, apenas para leste.','Dos trópicos, sem relação com o Equador.','Do nível médio do mar.'],explanation:'Latitude é a distância angular em relação ao Equador, de 0° a 90° norte ou sul.',difficulty:'medio'}
+    ]; return bank[rand(0,bank.length-1)];
+  },
+  'Biologia':()=>{
+    const bank=[
+      {q:'A organela diretamente associada à maior parte da produção de ATP na respiração celular eucariótica é:',correct:'Mitocôndria.',wrong:['Lisossomo.','Complexo golgiense.','Ribossomo.'],explanation:'A cadeia respiratória e a fosforilação oxidativa ocorrem nas mitocôndrias.',difficulty:'facil'},
+      {q:'Na fotossíntese, o carbono incorporado à matéria orgânica provém principalmente de:',correct:'Dióxido de carbono.',wrong:['Oxigênio molecular.','Nitrogênio atmosférico.','Vapor de água.'],explanation:'O CO₂ fornece o carbono fixado no ciclo de Calvin.',difficulty:'medio'},
+      {q:'A meiose é importante porque:',correct:'Reduz à metade o número de cromossomos e contribui para a variabilidade genética.',wrong:['Produz duas células geneticamente idênticas em todos os casos.','Duplica permanentemente o número de cromossomos.','Ocorre apenas em células bacterianas.'],explanation:'A meiose forma células haploides e promove variabilidade por recombinação e segregação.',difficulty:'medio'}
+    ]; return bank[rand(0,bank.length-1)];
+  },
+  'Física':()=>{
+    const kind=rand(0,2);
+    if(kind===0){const m=rand(2,8),a=rand(2,6),f=m*a;return{q:`Um corpo de massa ${m} kg adquire aceleração de ${a} m/s². Desprezando outras forças, qual é a força resultante?`,correct:`${f} N`,wrong:[`${f+a} N`,`${Math.max(1,f-a)} N`,`${m+a} N`],explanation:`Pela segunda lei de Newton, F = m·a = ${m}·${a} = ${f} N.`,difficulty:'medio'};}
+    if(kind===1){const d=rand(80,240),t=[2,4,5][rand(0,2)],v=d/t;return{q:`Um veículo percorre ${d} km em ${t} horas, mantendo velocidade média constante. A velocidade média é:`,correct:`${v} km/h`,wrong:[`${v+10} km/h`,`${Math.max(5,v-10)} km/h`,`${d+t} km/h`],explanation:`Velocidade média = distância/tempo = ${d}/${t} = ${v} km/h.`,difficulty:'facil'};}
+    const u=rand(6,24),r=[2,3,4,6][rand(0,3)],i=Math.round((u/r)*100)/100;return{q:`Em um resistor de ${r} Ω submetido a ${u} V, qual corrente elétrica circula segundo a lei de Ohm?`,correct:`${String(i).replace('.',',')} A`,wrong:[`${String(i+1).replace('.',',')} A`,`${r*u} A`,`${Math.max(1,u-r)} A`],explanation:`I = U/R = ${u}/${r} = ${String(i).replace('.',',')} A.`,difficulty:'medio'};
+  },
+  'Química':()=>{
+    const bank=[
+      {q:'Uma solução com pH 2 é classificada como:',correct:'Ácida.',wrong:['Básica.','Neutra.','Necessariamente salina.'],explanation:'Valores de pH abaixo de 7 indicam caráter ácido, nas condições usuais de referência.',difficulty:'facil'},
+      {q:'A partícula subatômica que possui carga elétrica negativa é o:',correct:'Elétron.',wrong:['Próton.','Nêutron.','Núcleo.'],explanation:'Elétrons têm carga negativa; prótons, positiva; nêutrons são eletricamente neutros.',difficulty:'facil'},
+      {q:'Elementos de uma mesma família da tabela periódica apresentam, em geral:',correct:'Propriedades químicas semelhantes associadas à configuração da camada de valência.',wrong:['O mesmo número de massa.','A mesma quantidade total de elétrons.','O mesmo número de níveis de energia em todos os períodos.'],explanation:'Elementos de uma mesma família compartilham padrões de elétrons de valência, o que leva a semelhanças químicas.',difficulty:'medio'}
+    ]; return bank[rand(0,bank.length-1)];
+  }
+};
+function generateSmartContestQuestion(){
+  // No modo INSS 2022, usar somente questões revisadas sobre os dois decretos.
+  if(state.mode==='edital' && state.editalInstitution==='INSS') return null;
+  const subjects=smartQuestionSubjects(); if(!subjects.length) return null;
+  const subject=subjects[rand(0,subjects.length-1)]; const factory=SMART_QUESTION_TEMPLATES[subject]; if(!factory)return null;
+  let data=factory();
+  if(state.difficulty!=='todas' && data.difficulty!==state.difficulty){
+    for(let i=0;i<6&&data.difficulty!==state.difficulty;i++) data=factory();
+  }
+  const prefix=state.mode==='publicoTematico'&&state.publicThemeLabel?`No contexto de preparação para ${state.publicThemeLabel}, `:'';
+  if(prefix && !data.q.startsWith(prefix)) data={...data,q:prefix+lowerFirst(data.q)};
+  return makeSmartQuestion(subject,data);
+}
+function buildSmartContestQuestions(amount){
+  if(!smartBotEnabled()) return [];
+  const competition=['concurso','publicoTematico','edital'].includes(state.mode) || smartQuestionSubjects().length===1;
+  if(!competition) return [];
+  const out=[]; for(let i=0;i<amount;i++){const q=generateSmartContestQuestion();if(q)out.push(q);} return out;
 }
 
 function filteredBank(){
@@ -284,11 +438,14 @@ function nextQuestion(){
   state.locked=false; $('#btnNext').classList.add('hidden'); $('#explanationBox').classList.add('hidden'); $('#optionsContainer').innerHTML='';
 
   const bank=filteredBank();
-  if(!bank.length){ toast('Não há questões nesse filtro.'); showHome(); return; }
+  const canSmart=smartBotEnabled() && (['concurso','publicoTematico','edital'].includes(state.mode) || smartQuestionSubjects().length===1);
+  const smartQ=canSmart ? generateSmartContestQuestion() : null;
+  if(!bank.length && !smartQ){ toast('Não há questões nesse filtro.'); showHome(); return; }
 
   let q;
   const canProcedural=(state.mode==='infinito'||state.mode==='sobrevivencia'||state.mode==='contraTempo') && (state.subject==='todas'||state.subject==='Matemática');
-  if(canProcedural && Math.random()<.18) q=generateMathQuestion();
+  if(smartQ && (!bank.length || Math.random()<.48)) q=smartQ;
+  else if(canProcedural && Math.random()<.18) q=generateMathQuestion();
   else q=chooseQuestion(bank);
 
   if(!q){ toast('Não foi possível selecionar uma questão.'); return; }
@@ -304,7 +461,7 @@ function nextQuestion(){
 }
 
 function prepareVariant(q){
-  if(q._procedural) return {...q, variantNumber:1};
+  if(q._procedural || q._smartBot) return {...q, variantNumber:1};
   const variants=Array.isArray(q.variants) && q.variants.length>=2 ? q.variants : [
     q.q,
     QUESTION_ALT_TEXT[q.id] || `Responda corretamente ao seguinte item de ${q.subject}: ${q.q}`,
@@ -330,7 +487,7 @@ function renderQuestion(q){
     const inst=state.editalInstitution || (q.institutions && q.institutions[0]) || 'Vestibular';
     const meta=(typeof EDITAL_PROGRAM_SOURCES!=='undefined' && EDITAL_PROGRAM_SOURCES[inst]) ? EDITAL_PROGRAM_SOURCES[inst] : null;
     sourceText.textContent=`${inst} • ${q.editalSection || 'Conteúdo programático'} • questão autoral baseada em documento oficial`;
-    const href=state.editalUrl || meta?.url || q.sourceUrl;
+    const href=(inst==='INSS' && q.sourceUrl) ? q.sourceUrl : (state.editalUrl || meta?.url || q.sourceUrl);
     if(href){ sourceLink.href=href; sourceLink.classList.remove('hidden'); } else sourceLink.classList.add('hidden');
   } else if(q.realExam){
     const bank=q.bank || (q.exam==='ENEM'?'INEP':q.exam);
@@ -351,6 +508,7 @@ function renderQuestion(q){
     btn.addEventListener('click',()=>answerQuestion(btn,op.index)); $('#optionsContainer').appendChild(btn);
   });
   updateHud();
+  const mapBtn=$('#btnMindMap'); if(mapBtn) mapBtn.onclick=()=>openMindMap(q);
 }
 
 function answerQuestion(btn,selected){
@@ -363,9 +521,9 @@ function answerQuestion(btn,selected){
     state.correct++; state.streak++; state.bestStreak=Math.max(state.bestStreak,state.streak);
     const multiplier=1+Math.min(1.5,Math.floor(state.streak/3)*.25);
     const base=state.current.difficulty==='dificil'?150:state.current.difficulty==='medio'?110:80;
-    state.score+=Math.round(base*multiplier); beep(700,.08); toast(state.streak>=3?`🔥 Combo x${state.streak}!`:'Boa! Resposta certa.');
+    state.score+=Math.round(base*multiplier); toast(state.streak>=3?`🔥 Combo x${state.streak}!`:'Boa! Resposta certa.');
   } else {
-    state.wrong++; state.streak=0; btn.classList.add('wrong'); beep(180,.12); if(state.mode==='sobrevivencia')state.lives--;
+    state.wrong++; state.streak=0; btn.classList.add('wrong'); if(state.mode==='sobrevivencia')state.lives--;
   }
   recordAnswerHistory(selected,correct);
   $('#explanationText').textContent=state.current.explanation;
@@ -446,6 +604,12 @@ window.startPublicThemeTraining = function(label, subjects){
   startGame();
 };
 
+window.startInssEthicsTraining = function(){
+  window.startEditalTraining?.('INSS',2022,'https://www.gov.br/inss/pt-br/centrais-de-conteudo/legislacao/edital/2022');
+};
+
+document.getElementById('btnInssEthics')?.addEventListener('click',()=>window.startInssEthicsTraining());
+
 window.startEditalTraining = function(institution, year, url){
   clearInterval(state.timer);
   state.mode='edital'; state.editalInstitution=institution; state.editalYear=Number(year)||null; state.editalUrl=url||null;
@@ -467,6 +631,7 @@ function updateBankCount(){
   state.subject=old.subject; state.difficulty=old.difficulty; state.source=old.source;
 }
 function questionSourceLabel(q){
+  if(q?._smartBot) return `Gerador inteligente • ${contestContextLabel()}`;
   if(q?.editalBased) return `${state.editalInstitution || q.institutions?.[0] || 'Edital'} • conteúdo programático`;
   if(q?.realExam) return `${q.bank || q.exam || 'Prova oficial'}${q.year ? ' • '+q.year : ''}`;
   return 'Desafio Aprovação';
@@ -554,9 +719,7 @@ function showScreen(id){$$('.screen').forEach(s=>s.classList.remove('active'));$
 function showHome(){clearInterval(state.timer);showScreen('homeScreen');refreshHomeStats();updateRecentInfo();renderAnswerHistory();}
 function saveStats(){localStorage.setItem('da_stats',JSON.stringify(stats));}
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('show'),1900);}
-function toggleTheme(){document.body.classList.toggle('dark');$('#btnTheme').textContent=document.body.classList.contains('dark')?'🌙':'☀️';}
-function toggleSound(){state.sound=!state.sound;$('#btnSound').textContent=state.sound?'🔊':'🔇';}
-function beep(freq,duration){if(!state.sound)return;try{const ctx=new(window.AudioContext||window.webkitAudioContext)(),o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=freq;g.gain.value=.035;o.start();o.stop(ctx.currentTime+duration);}catch(e){}}
+function toggleTheme(){document.body.classList.toggle('dark');try{localStorage.setItem(THEME_KEY,document.body.classList.contains('dark')?'dark':'light');}catch{}updateThemeButton();}
 function shuffleUnique(arr){const unique=[...new Set(arr.map(String))];let n=1;while(unique.length<4){unique.push(String(Number(arr[0])+n*7));n++;}return unique.sort(()=>Math.random()-.5);}
 function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
 function capitalize(s){return s.charAt(0).toUpperCase()+s.slice(1);}

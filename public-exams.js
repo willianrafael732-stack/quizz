@@ -32,7 +32,8 @@
     {id:'agrario', group:'Técnica e tecnologia', icon:'🌾', title:'Agrário e Agropecuário', desc:'Agronomia, veterinária e fiscalização agropecuária.', examples:['MAPA','secretarias de agricultura'], subjects:['Português','Biologia','Química','Geografia']},
     {id:'pesquisa', group:'Ciência e dados', icon:'🔬', title:'Pesquisa e Ciência', desc:'Pesquisadores, tecnologistas e técnicos em institutos públicos.', examples:['Fiocruz','Inmetro','institutos de pesquisa'], subjects:['Português','Matemática','Biologia','Física','Química']},
     {id:'estatistica', group:'Ciência e dados', icon:'📊', title:'Estatística e Pesquisas', desc:'Coleta, análise, recenseamento e produção de dados oficiais.', examples:['IBGE','estatístico','agente de pesquisa'], subjects:['Português','Matemática','Raciocínio Lógico','Informática','Geografia']},
-    {id:'previdencia', group:'Administração', icon:'👴', title:'Previdência e Assistência', desc:'Carreiras previdenciárias, serviço social e atendimento ao cidadão.', examples:['INSS','assistência social'], subjects:['Português','Matemática','Raciocínio Lógico','Informática','Direito Constitucional','Direito Administrativo']},
+    {id:'inss-etica', group:'Administração', icon:'📘', title:'INSS 2022 — Ética no Serviço Público', desc:'Decretos 1.171/1994 e 6.029/2007 e suas alterações, conforme o edital do INSS.', examples:['INSS','Técnico do Seguro Social','Cebraspe'], subjects:['Ética no Serviço Público']},
+    {id:'previdencia', group:'Administração', icon:'👴', title:'Previdência e Assistência', desc:'Carreiras previdenciárias, serviço social e atendimento ao cidadão.', examples:['INSS','assistência social'], subjects:['Português','Matemática','Raciocínio Lógico','Informática','Direito Constitucional','Direito Administrativo','Ética no Serviço Público']},
     {id:'agencias', group:'Administração', icon:'📡', title:'Agências Reguladoras', desc:'Especialistas, técnicos e analistas de regulação.', examples:['Anatel','Anvisa','ANEEL','ANP','ANTT','ANA'], subjects:['Português','Matemática','Raciocínio Lógico','Informática','Direito Constitucional','Direito Administrativo']},
     {id:'conselhos', group:'Administração', icon:'🪪', title:'Conselhos Profissionais', desc:'Assistentes, fiscais e analistas em conselhos de classe.', examples:['CREA','CRM','CRC','CRP','CRF'], subjects:['Português','Raciocínio Lógico','Informática','Direito Administrativo']},
     {id:'municipal', group:'Esfera', icon:'🏙️', title:'Concursos Municipais', desc:'Prefeituras, câmaras, autarquias e serviços municipais.', examples:['Prefeituras','Câmaras Municipais'], subjects:['Português','Matemática','Raciocínio Lógico','Informática']},
@@ -127,7 +128,8 @@
     </button>`).join('') : '<div class="feed-empty"><strong>Nenhum tipo encontrado</strong><p>Tente outro termo ou selecione “Todas as áreas”.</p></div>';
     grid.querySelectorAll('[data-type]').forEach(btn => btn.addEventListener('click', () => {
       const t = TYPES.find(x => x.id === btn.dataset.type); if(!t) return;
-      if(typeof window.startPublicThemeTraining === 'function') window.startPublicThemeTraining(t.title, t.subjects);
+      if(t.id==='inss-etica' && typeof window.startInssEthicsTraining === 'function') window.startInssEthicsTraining();
+      else if(typeof window.startPublicThemeTraining === 'function') window.startPublicThemeTraining(t.title, t.subjects);
     }));
   }
 

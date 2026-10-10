@@ -26,3 +26,14 @@ public-exams.js
 editais.js
 
 Observação: os dados de progresso e histórico ficam no navegador/dispositivo em que o site foi aberto.
+
+ATUALIZAÇÃO INSS 2022 — ÉTICA NO SERVIÇO PÚBLICO
+- Painel do INSS na página inicial, com os dois decretos e atalhos de treino.
+- Resumo completo e responsivo em inss-etica.html.
+- 32 questões autorais comentadas em inss-etica-questions.js (não são itens oficiais).
+- Novo filtro "INSS 2022 (Técnico)" no acervo de editais.
+- Nova área "INSS 2022 — Ética no Serviço Público" no catálogo de concursos.
+- O modo INSS usa apenas questões específicas revisadas sobre os Decretos 1.171/1994 e 6.029/2007.
+- Links para o edital de 2022 no portal do INSS e para os textos dos decretos no Planalto.
+- Ao publicar, leve também os arquivos inss-etica.html e inss-etica-questions.js.
+- Este módulo refere-se ao edital de 2022 mostrado na imagem. Não é anúncio de edital de 2026.

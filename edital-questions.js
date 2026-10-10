@@ -1,6 +1,7 @@
 // Banco autoral criado a partir dos conteúdos e da estrutura descritos em matrizes,
 // programas e manuais oficiais. Não reproduz literalmente as questões das provas.
 const EDITAL_PROGRAM_SOURCES = {
+  INSS: {label:'INSS • Edital nº 1/2022',url:'https://www.gov.br/inss/pt-br/centrais-de-conteudo/legislacao/edital/2022',verifiedYear:2022},
   ENEM: {
     label: 'INEP • Matriz de Referência do ENEM',
     url: 'https://www.gov.br/inep/pt-br/centrais-de-conteudo/acervo-linha-editorial/publicacoes-institucionais/avaliacoes-e-exames-da-educacao-basica/matrizes-de-referencia-enem',

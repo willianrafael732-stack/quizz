@@ -1,2 +1,31 @@
 .exam-toggle{display:flex;gap:12px;align-items:center;font-size:1rem;font-weight:650;margin:20px 0 8px}.exam-toggle input{width:20px;height:20px;accent-color:#6542ce;flex-shrink:0}.exam-note{font-size:.9rem;line-height:1.6;color:var(--muted);margin:0 0 18px}
 #examDialog{position:fixed;inset:0;width:100%;max-width:none;height:100%;max-height:none;margin:0;padding:0;border:0;background:#f4f5f9;color:#242035;font:1rem/1.6 system-ui,sans-serif;overflow:auto}#examDialog::backdrop{background:#171126}#examDialog *{box-sizing:border-box}#examDialog button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid #d4d0e0;background:white;color:#35284e;padding:10px 16px;min-height:44px}#examDialog button:focus-visible,#examDialog input:focus-visible{outline:3px solid #8264d9;outline-offset:3px}#examDialog button:disabled{opacity:.45;cursor:default}#examDialog .exam-primary{background:#5732b8;border-color:#5732b8;color:#fff}#examDialog .exam-top{background:#241b49;color:#fff;padding:20px max(24px,calc((100vw - 1160px)/2));display:flex;justify-content:space-between;gap:24px;align-items:center}#examDialog .exam-top p{margin:0;color:#dbd4ed;font-size:.9rem}#examDialog h1{font-size:1.3rem;margin:0}#examDialog h2{font-size:1.2rem;line-height:1.6;margin:16px 0 24px}#examDialog .exam-layout{max-width:1208px;margin:32px auto;padding:0 24px;display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:24px}#examDialog .exam-paper,#examDialog .exam-aside{background:#fff;border:1px solid #ddd9e7;border-radius:12px;padding:28px;align-self:start}#examDialog .exam-aside{padding:20px;position:sticky;top:20px}#examDialog .exam-meta{color:#615574;font-size:.9rem}#examDialog fieldset{padding:0;margin:0;border:0;min-width:0}#examDialog legend{font-weight:600;margin-bottom:16px}#examDialog .exam-option{display:flex;align-items:flex-start;gap:12px;border:1px solid #d8d4e2;border-radius:8px;padding:16px;margin:12px 0;cursor:pointer;overflow-wrap:anywhere}#examDialog .exam-option:has(input:checked){background:#f1ecff;border-color:#7653cd}#examDialog .exam-option input{accent-color:#5732b8;margin-top:6px}#examDialog .exam-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px;align-items:center;justify-content:space-between}#examDialog .exam-nav{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:16px 0}#examDialog .exam-nav button{padding:8px;position:relative}#examDialog .exam-nav .answered{background:#eee8fb;border-color:#9377d2}#examDialog .exam-nav .flagged:after{content:'•';position:absolute;right:3px;top:-7px;color:#8d5700;font-size:24px}#examDialog .exam-nav [aria-current=true]{outline:2px solid #5732b8;outline-offset:1px}#examDialog .exam-result{font-size:2.5rem;font-weight:750;color:#5732b8;margin:8px 0}#examDialog .exam-review{border-top:1px solid #ddd9e7;padding:20px 0;overflow-wrap:anywhere}#examDialog .exam-review summary{cursor:pointer;font-weight:650}#examDialog .exam-correct{color:#166344}#examDialog .exam-wrong{color:#ae253f}#examDialog .exam-alert{padding:18px;background:#fff4db;border:1px solid #dbc08d;border-radius:8px;margin-top:20px}#examDialog .exam-alert[hidden]{display:none}#examDialog .exam-close{white-space:nowrap}@media(max-width:760px){#examDialog .exam-layout{grid-template-columns:1fr;margin:20px auto;padding:0 16px}#examDialog .exam-paper{padding:20px}#examDialog .exam-aside{position:static}#examDialog .exam-top{padding:16px;flex-wrap:wrap}#examDialog .exam-nav{grid-template-columns:repeat(5,1fr)}}
+#examDialog .exam-study-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 16px}#examDialog .exam-study-tools button{font-weight:700;color:#5732b8;background:#f7f4ff;border-color:#d9d0f5}
+body.dark #examDialog .exam-study-tools button{color:#c4b6ff;background:#2a2741;border-color:#4a426c}
+
+
+#examDialog .exam-top-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#examDialog .exam-paper{position:relative}
+#examDialog .exam-helper-toggle{position:absolute;top:20px;right:20px;z-index:3;padding:8px 12px;border-radius:999px;font-size:.9rem;background:#f7f4ff;border-color:#d9d0f5;color:#5732b8}
+#examDialog .exam-helper-panel{position:absolute;top:64px;right:20px;width:min(360px,calc(100% - 40px));max-height:min(65vh,520px);overflow:auto;background:#ffffff;border:1px solid #ddd9e7;border-radius:16px;padding:16px;box-shadow:0 18px 44px rgba(26,17,49,.12);display:none;z-index:2}
+#examDialog .exam-helper-panel.is-open{display:block}
+#examDialog .exam-helper-head{display:grid;gap:10px;margin-bottom:16px}
+#examDialog .exam-helper-kicker{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#6d4ee8}
+#examDialog .exam-helper-head strong{font-size:1rem;color:#2b2146}
+#examDialog .exam-helper-head p{margin:0;color:#615574;font-size:.9rem;line-height:1.6}
+#examDialog .exam-helper-grid{display:grid;gap:16px}
+#examDialog .exam-helper-branch{display:grid;gap:16px;padding:14px;border:1px solid #e2ddef;border-radius:14px;background:#faf8ff}
+#examDialog .exam-helper-branch h3{margin:0;font-size:.95rem;color:#5a3dbd}
+#examDialog .exam-helper-items{display:grid;gap:16px}
+#examDialog .exam-helper-items span{display:block;padding:10px 12px;border-radius:10px;border:1px solid #ddd9e7;background:#fff;line-height:1.6;word-break:break-word}
+body.dark #examDialog .exam-top-actions button{background:#2a2741;border-color:#484266;color:#f3efff}
+body.dark #examDialog .exam-helper-toggle{background:#2a2741;border-color:#4a426c;color:#c4b6ff}
+body.dark #examDialog .exam-helper-panel{background:#211f35;border-color:#3e3959;box-shadow:none}
+body.dark #examDialog .exam-helper-head strong{color:#f4f1ff}
+body.dark #examDialog .exam-helper-head p{color:#c9c1de}
+body.dark #examDialog .exam-helper-branch{background:#29263f;border-color:#433d62}
+body.dark #examDialog .exam-helper-items span{background:#211f35;border-color:#433d62;color:#f4f1ff}
+@media(max-width:760px){#examDialog .exam-top-actions{width:100%;justify-content:space-between}#examDialog .exam-helper-toggle{position:static;margin-bottom:12px}#examDialog .exam-helper-panel{position:static;width:100%;max-height:none;margin:0 0 16px}}
+#examDialog .exam-exit{font-weight:700;border-style:solid}
+body.dark #examDialog .exam-exit{background:#2a2741;border-color:#6a5f80;color:#f3efff}
+.smart-bot-toggle{margin-top:16px}

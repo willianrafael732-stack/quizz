@@ -92,3 +92,52 @@ body.dark .study-dashboard{background:linear-gradient(180deg,rgba(49,43,77,.58),
   .study-dashboard{padding:14px;margin-left:-2px;margin-right:-2px;border-radius:18px}.dashboard-title,.history-heading{align-items:flex-start;flex-direction:column}.dashboard-xp{align-self:flex-start}.study-dashboard .mode-grid{grid-template-columns:1fr}.study-dashboard .mode-card{min-height:0}.history-head-actions{width:100%;display:grid;grid-template-columns:1fr 1fr}.history-head-actions select,.history-head-actions .secondary-btn{width:100%}.history-summary-grid{grid-template-columns:1fr 1fr}.history-item summary{grid-template-columns:auto minmax(0,1fr)}.history-result-pill{grid-column:2;justify-self:start}.history-summary-text>strong{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.sidebar-nav{grid-template-columns:repeat(4,1fr)!important}.nav-item{flex-direction:column;gap:4px!important}.nav-item b{display:block!important;font-size:9px!important;white-space:nowrap}.nav-item span{width:auto!important}.progress-data-actions{grid-template-columns:1fr 1fr}.topbar-right{gap:8px}.profile-bubble{display:none}
 }
 @media(max-width:480px){.history-summary-grid{grid-template-columns:1fr 1fr}.history-head-actions{grid-template-columns:1fr}.progress-data-actions{grid-template-columns:1fr}.stats-strip{grid-template-columns:1fr!important}.sidebar-nav{grid-template-columns:repeat(4,1fr)!important}.nav-item b{font-size:8px!important}}
+
+/* V11 — mapa mental, modo escuro de prova e revisão mobile */
+.mind-map-btn{border:1px solid var(--border);background:var(--surface-2);color:var(--primary);border-radius:10px;padding:10px 13px;font-weight:800;cursor:pointer}
+.mind-map-btn:hover{border-color:var(--primary);transform:translateY(-1px)}
+.mind-map-dialog{width:min(920px,calc(100vw - 24px));max-width:none;border:0;border-radius:22px;padding:0;background:transparent;color:var(--text)}
+.mind-map-dialog::backdrop{background:rgba(16,12,31,.72);backdrop-filter:blur(3px)}
+.mind-map-shell{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:22px;box-shadow:0 28px 80px rgba(0,0,0,.25)}
+.mind-map-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}.mind-map-head h2{margin:5px 0 5px;font-size:24px}.mind-map-head p{margin:0;color:var(--muted);font-size:13px;max-width:650px}.mind-map-kicker{font-size:10px;font-weight:900;letter-spacing:.1em;color:var(--primary)}
+.mind-map-close{width:42px;height:42px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);cursor:pointer}
+.mind-map-canvas{margin-top:22px;display:grid;gap:18px}.mind-map-center{justify-self:center;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;font-weight:900;border-radius:999px;padding:15px 22px;box-shadow:0 12px 28px rgba(109,78,232,.2)}
+.mind-map-branches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.mind-map-branch{position:relative;background:var(--surface-2);border:1px solid var(--border);border-radius:16px;padding:16px;display:grid;gap:8px}.mind-map-branch:before{content:"";position:absolute;top:-18px;left:50%;height:18px;border-left:2px solid var(--border)}.mind-map-branch strong{color:var(--primary)}.mind-map-branch span{font-size:12px;color:var(--text);padding:7px 9px;background:var(--surface);border:1px solid var(--border);border-radius:9px}.mind-map-foot{margin-top:16px;color:var(--muted);font-size:12px;text-align:center}
+body.dark .mind-map-shell{background:#211f35;border-color:#3d3858}body.dark .mind-map-branch{background:#29263f;border-color:#433d62}body.dark .mind-map-branch span,body.dark .mind-map-close{background:#211f35;border-color:#433d62;color:#f2efff}
+
+body.dark #examDialog{background:#171624;color:#f4f1ff}
+body.dark #examDialog .exam-paper,body.dark #examDialog .exam-aside{background:#211f35;border-color:#3e3959;color:#f4f1ff}
+body.dark #examDialog button{background:#2a2741;border-color:#484266;color:#f3efff}
+body.dark #examDialog .exam-primary{background:#7657e8;border-color:#7657e8;color:#fff}
+body.dark #examDialog .exam-meta{color:#bcb6cf}
+body.dark #examDialog .exam-option{background:#242137;border-color:#45405f;color:#f4f1ff}
+body.dark #examDialog .exam-option:has(input:checked){background:#342d55;border-color:#8d73f4;box-shadow:inset 4px 0 0 #8d73f4}
+body.dark #examDialog .exam-nav .answered{background:#342d55;border-color:#7563b8}
+body.dark #examDialog .exam-nav [aria-current=true]{outline:2px solid #9a83ff;outline-offset:1px;background:#3b3260}
+body.dark #examDialog .exam-review{border-color:#3f3a57}
+body.dark #examDialog .exam-alert{background:#372f22;border-color:#6b5834;color:#fff4d5}
+body.dark #examDialog .exam-result{color:#a990ff}
+body.dark #examDialog .exam-correct{color:#80d8b7}body.dark #examDialog .exam-wrong{color:#ff9cac}
+.exam-result-actions{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 8px}.exam-result-actions button{flex:0 1 auto}
+@media(max-width:700px){.mind-map-shell{padding:16px}.mind-map-head{gap:10px}.mind-map-head h2{font-size:20px}.mind-map-branches{grid-template-columns:1fr}.mind-map-branch:before{display:none}.exam-result-actions{display:grid;grid-template-columns:1fr}.exam-result-actions button{width:100%}}
+
+/* INSS 2022 — módulo Ética no Serviço Público */
+.inss-ethics-panel{margin:24px 0; padding:24px; border-radius:20px; background:linear-gradient(130deg,rgba(42,101,178,.09),rgba(66,122,210,.04)); border:1px solid rgba(64,127,213,.32); color:inherit}
+.inss-ethics-top{display:flex;justify-content:space-between;gap:22px;align-items:flex-start}
+.inss-ethics-top h2{font-size:clamp(1.45rem,2.8vw,2rem);line-height:1.15;margin:8px 0 10px;color:inherit}
+.inss-ethics-top p{max-width:720px;line-height:1.55;margin:0}
+.inss-ethics-eyebrow{font-size:.77rem;font-weight:800;letter-spacing:.07em;color:#4d84d8}
+.inss-ethics-stat{border-radius:30px;border:1px solid rgba(75,129,210,.25);background:rgba(80,138,218,.1);padding:9px 14px;font-size:.85rem;font-weight:700;white-space:nowrap}
+.inss-ethics-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0}
+.inss-ethics-columns article{border-radius:14px;background:var(--surface,#fff);border:1px solid rgba(106,133,174,.25);padding:18px;min-width:0}
+.inss-ethics-columns strong{font-size:1.05rem}
+.inss-ethics-columns p{font-size:.92rem;line-height:1.55;margin:8px 0}
+.inss-ethics-columns a,.inss-ethics-edital,.inss-ethics-guide{color:#4079d7;text-decoration:none;font-weight:750}
+.inss-ethics-footer{display:flex;flex-wrap:wrap;gap:15px;align-items:center;margin:14px 0 12px}
+.inss-ethics-start{cursor:pointer;background:#315fd0;color:#fff;border:0;border-radius:12px;padding:14px 18px;font-size:.98rem;font-weight:800}
+.inss-ethics-start:hover{background:#234ab3}
+.inss-ethics-panel>small{display:block;opacity:.72;line-height:1.4}
+.dark .inss-ethics-panel{background:linear-gradient(125deg,rgba(52,99,177,.19),rgba(52,99,177,.05));border-color:rgba(91,145,223,.36)}
+.dark .inss-ethics-columns article{background:#171e31;border-color:rgba(110,152,220,.22)}
+.dark .inss-ethics-columns a,.dark .inss-ethics-edital,.dark .inss-ethics-guide{color:#94baff}
+@media(max-width:740px){.inss-ethics-panel{padding:18px}.inss-ethics-top{flex-direction:column;gap:10px}.inss-ethics-columns{grid-template-columns:1fr}.inss-ethics-footer{align-items:stretch;flex-direction:column}.inss-ethics-start{width:100%;text-align:center}}

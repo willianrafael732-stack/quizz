@@ -30,3 +30,8 @@ Os arquivos podem ser hospedados como site estático. O domínio `chatgpt.site` 
 ## Nota sobre a exportação
 
 No repositório, `study-tools.js` utiliza uma implementação alternativa de compatibilidade para mapa mental e impressão/salvamento de resultados em PDF. O arquivo original segue preservado no pacote ZIP do projeto fornecido pelo autor; a versão deste GitHub não é uma exportação exata do site hospedado.
+
+
+## Guias de pesos e prioridades (10/10/2026)
+
+O arquivo `vestibulares.html` reúne 10 guias separados: `vestibular-enem.html`, `vestibular-fuvest.html`, `vestibular-unicamp.html`, `vestibular-unesp.html`, `vestibular-ufpr.html`, `vestibular-uel.html`, `vestibular-uem.html`, `vestibular-uece.html`, `vestibular-ufu.html` e `vestibular-fatec.html`. Cada guia separa o dado oficial por edição, a variação de pesos por curso e a estratégia de estudo, com links das fontes. O checklist persiste no navegador. Não foram alteradas questões nem a versão privada hospedada no ChatGPT Sites.

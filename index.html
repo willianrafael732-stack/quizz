@@ -3747,6 +3747,13 @@
           Entrar com Google
         </button>
       </div>
+      <div id="daAuthRecoveryArea" hidden>
+        <p class="da-auth-note">Defina sua nova senha para acessar sua conta.</p>
+        <form id="daAuthRecoveryForm">
+          <div class="da-auth-field"><label for="daAuthNewPassword">Nova senha</label><input type="password" minlength="6" id="daAuthNewPassword" autocomplete="new-password" required></div>
+          <button class="da-auth-action" type="submit">Atualizar minha senha</button>
+        </form>
+      </div>
       <div class="da-auth-profile" id="daAuthProfileArea" hidden>
         <strong id="daAuthProfileName"></strong><span class="da-auth-profile-email" id="daAuthProfileEmail"></span>
         <p class="da-auth-note">Seu progresso principal é salvo na conta Supabase. Saia da conta para voltar ao modo visitante deste aparelho.</p>

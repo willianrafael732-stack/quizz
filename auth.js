@@ -14,6 +14,7 @@
   let user = null;
   let hydrated = false;
   let mode = 'signin';
+  let recoveryMode = false;
   let pendingTimer = null;
   let saving = Promise.resolve();
 
@@ -55,8 +56,9 @@
     if (!accountButton) return;
     accountButton.textContent = user ? '👤 ' + displayName(user) : '👤 Entrar';
     accountButton.title = user ? 'Minha conta' : 'Entrar ou criar conta';
-    byId('daAuthFormArea').hidden = Boolean(user);
-    byId('daAuthProfileArea').hidden = !user;
+    byId('daAuthFormArea').hidden = Boolean(user) || recoveryMode;
+    byId('daAuthProfileArea').hidden = !user || recoveryMode;
+    byId('daAuthRecoveryArea').hidden = !recoveryMode;
     byId('daAuthProfileName').textContent = user ? displayName(user) : '';
     byId('daAuthProfileEmail').textContent = user?.email || '';
   }
@@ -106,7 +108,7 @@
       }
     }
     hydrated = true;
-    closeModal();
+    if (!recoveryMode) closeModal();
   }
   function clearAccount() {
     if (!user) return;
@@ -186,6 +188,18 @@
     }
   });
 
+  byId('daAuthRecoveryForm')?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const password = byId('daAuthNewPassword').value;
+    if (password.length < 6) { setMessage('Use uma senha com pelo menos 6 caracteres.', 'error'); return; }
+    const { error } = await client.auth.updateUser({password});
+    if (error) { setMessage(error.message, 'error'); return; }
+    recoveryMode = false;
+    byId('daAuthNewPassword').value = '';
+    renderAccount();
+    setMessage('Senha atualizada! Sua conta está pronta para uso.', 'success');
+  });
+
   byId('daAuthGoogle')?.addEventListener('click', async () => {
     setBusy(true);
     setMessage('Redirecionando para o Google...');
@@ -222,7 +236,13 @@
 
   client.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_OUT') {
+      recoveryMode = false;
       clearAccount();
+    } else if (event === 'PASSWORD_RECOVERY') {
+      recoveryMode = true;
+      renderAccount();
+      openModal();
+      setMessage('Digite uma nova senha para recuperar sua conta.');
     } else if (event === 'SIGNED_IN' && session?.user) {
       // Não faça queries Supabase dentro do callback síncrono de Auth.
       setTimeout(() => { loadAccount(session.user).catch(console.warn); }, 0);

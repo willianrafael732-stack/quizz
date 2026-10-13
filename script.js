@@ -119,12 +119,12 @@ function loadRecentHistory(){
   try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]').filter(x => x !== null && x !== undefined); }
   catch { return []; }
 }
-function saveRecentHistory(items){ localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(-MAX_HISTORY))); }
+function saveRecentHistory(items){ localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(-MAX_HISTORY))); window.DAAuth?.queueSync?.(); }
 function loadVariantHistory(){
   try { return JSON.parse(localStorage.getItem(VARIANT_KEY) || '{}'); }
   catch { return {}; }
 }
-function saveVariantHistory(map){ localStorage.setItem(VARIANT_KEY, JSON.stringify(map)); }
+function saveVariantHistory(map){ localStorage.setItem(VARIANT_KEY, JSON.stringify(map)); window.DAAuth?.queueSync?.(); }
 
 function loadAnswerHistory(){
   try{
@@ -135,6 +135,7 @@ function loadAnswerHistory(){
 function saveAnswerHistory(){
   answerHistory=answerHistory.slice(0,MAX_ANSWER_HISTORY);
   localStorage.setItem(ANSWER_HISTORY_KEY,JSON.stringify(answerHistory));
+  window.DAAuth?.queueSync?.();
 }
 
 let recentHistory = loadRecentHistory();
@@ -717,7 +718,7 @@ function refreshHomeStats(){
 }
 function showScreen(id){$$('.screen').forEach(s=>s.classList.remove('active'));$('#'+id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
 function showHome(){clearInterval(state.timer);showScreen('homeScreen');refreshHomeStats();updateRecentInfo();renderAnswerHistory();}
-function saveStats(){localStorage.setItem('da_stats',JSON.stringify(stats));}
+function saveStats(){localStorage.setItem('da_stats',JSON.stringify(stats));window.DAAuth?.queueSync?.();}
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('show'),1900);}
 function toggleTheme(){document.body.classList.toggle('dark');try{localStorage.setItem(THEME_KEY,document.body.classList.contains('dark')?'dark':'light');}catch{}updateThemeButton();}
 function shuffleUnique(arr){const unique=[...new Set(arr.map(String))];let n=1;while(unique.length<4){unique.push(String(Number(arr[0])+n*7));n++;}return unique.sort(()=>Math.random()-.5);}
@@ -726,3 +727,39 @@ function capitalize(s){return s.charAt(0).toUpperCase()+s.slice(1);}
 function lowerFirst(s){return s? s.charAt(0).toLowerCase()+s.slice(1):s;}
 function normalize(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();}
 function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+
+/* Ponte de progresso: torna as estatísticas existentes compatíveis com Supabase Auth. */
+window.DAStudy = {
+  snapshot(){
+    return {
+      stats: {...stats},
+      recentHistory: [...recentHistory],
+      variantHistory: {...variantHistory},
+      answerHistory: [...answerHistory]
+    };
+  },
+  restore(data) {
+    if(!data || typeof data !== 'object') return;
+    const s=data.stats || {};
+    Object.assign(stats, {
+      best:safeNumber(s.best), xp:safeNumber(s.xp), played:safeNumber(s.played),
+      daily:safeNumber(s.daily),
+      dailyDate:typeof s.dailyDate==='string'?s.dailyDate:'',
+      bestStreak:safeNumber(s.bestStreak)
+    });
+    if(stats.dailyDate !== new Date().toLocaleDateString('en-CA')) {
+      stats.daily=0;
+      stats.dailyDate=new Date().toLocaleDateString('en-CA');
+    }
+    recentHistory=Array.isArray(data.recentHistory)?data.recentHistory.slice(-MAX_HISTORY):[];
+    variantHistory=data.variantHistory && typeof data.variantHistory==='object' && !Array.isArray(data.variantHistory)?data.variantHistory:{};
+    answerHistory=Array.isArray(data.answerHistory)?data.answerHistory.slice(0,MAX_ANSWER_HISTORY):[];
+    localStorage.setItem('da_stats',JSON.stringify(stats));
+    localStorage.setItem(HISTORY_KEY,JSON.stringify(recentHistory));
+    localStorage.setItem(VARIANT_KEY,JSON.stringify(variantHistory));
+    localStorage.setItem(ANSWER_HISTORY_KEY,JSON.stringify(answerHistory));
+    refreshHomeStats();
+    updateRecentInfo();
+    renderAnswerHistory();
+  }
+};

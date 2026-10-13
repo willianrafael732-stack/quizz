@@ -1,0 +1,32 @@
+
+/* Autenticação opcional — mantém o visual claro/escuro do Desafio Aprovação. */
+.da-account-button{border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:12px;padding:10px 14px;font-weight:800;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.da-account-button:hover{border-color:var(--primary);color:var(--primary)}
+.da-auth-overlay[hidden]{display:none!important}
+.da-auth-overlay{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px;background:rgba(20,15,43,.72);backdrop-filter:blur(6px)}
+.da-auth-dialog{position:relative;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:22px;box-shadow:0 30px 80px rgba(0,0,0,.28);width:min(430px,100%);max-height:min(92vh,780px);overflow-y:auto;padding:28px}
+.da-auth-close{position:absolute;right:16px;top:14px;border:0;background:var(--surface-2);color:var(--text);width:34px;height:34px;border-radius:50%;font-size:20px}
+.da-auth-eyebrow{color:var(--primary);letter-spacing:.12em;font-size:11px;font-weight:900;text-transform:uppercase}
+.da-auth-dialog h2{font-size:27px;margin:8px 0}
+.da-auth-subtitle{margin:0 0 18px;color:var(--muted);font-size:13px;line-height:1.6}
+.da-auth-tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--surface-2);border-radius:11px;padding:4px;margin-bottom:18px}
+.da-auth-tab{border:0;background:transparent;color:var(--muted);border-radius:9px;padding:11px;font-weight:800}
+.da-auth-tab[aria-selected="true"]{background:var(--primary);color:#fff}
+.da-auth-field{display:grid;gap:6px;margin:12px 0}
+.da-auth-field label{font-weight:750;font-size:13px}
+.da-auth-field input{border:1px solid var(--border);background:var(--surface-2);color:var(--text);padding:12px 13px;border-radius:10px;width:100%}
+.da-auth-field input:focus{outline:2px solid var(--primary);outline-offset:1px}
+.da-auth-action{width:100%;border:0;border-radius:11px;background:var(--primary);color:#fff;padding:13px 16px;font-weight:850;margin-top:6px}
+.da-auth-action:disabled,.da-auth-google:disabled{opacity:.65;cursor:wait}
+.da-auth-google{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid var(--border);border-radius:11px;background:var(--surface-2);color:var(--text);font-weight:800;padding:13px;margin:12px 0}
+.da-auth-google svg{width:18px;height:18px;flex:none}
+.da-auth-divider{text-align:center;color:var(--muted);font-size:12px;margin:13px 0}
+.da-auth-links{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.da-auth-link{padding:6px 0;border:0;background:transparent;color:var(--primary);font-weight:750;text-decoration:underline;font-size:12px}
+.da-auth-message{font-size:13px;min-height:20px;line-height:1.45;color:var(--muted);margin:12px 0 0}
+.da-auth-message[data-kind="error"]{color:#dc4252}
+.da-auth-message[data-kind="success"]{color:var(--green)}
+.da-auth-profile{display:grid;gap:12px}
+.da-auth-profile-email{overflow-wrap:anywhere;color:var(--muted);font-size:13px}
+.da-auth-note{font-size:12px;color:var(--muted);line-height:1.5}
+@media(max-width:600px){.da-account-button{max-width:138px;padding:9px;font-size:12px}.da-auth-dialog{padding:22px}.topbar-right{gap:6px}}
